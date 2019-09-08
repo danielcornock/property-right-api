@@ -1,0 +1,29 @@
+{
+  "name": "property-right-api",
+  "version": "1.0.0",
+  "description": "API for Property Right.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielcornock/property-right-api.git"
+  },
+  "author": "Daniel Cornock",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielcornock/property-right-api/issues"
+  },
+  "homepage": "https://github.com/danielcornock/property-right-api#readme",
+  "dependencies": {
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.6.13"
+  },
+  "engines": {
+    "node": ">=10.6.0"
+  }
+}
