@@ -1,11 +1,20 @@
 const express = require('express');
 
+const userRouter = require('./users/userRoutes');
+
 const app = express();
 
-//* Body Parser
+//* Body Parser *//
 app.use(express.json());
 
+//*---------------------------------------------
+//* App main router
+//*---------------------------------------------
+app.use('/api/v1/users', userRouter);
+
+//*---------------------------------------------
 //* Handle unrecognised route requests
+//*---------------------------------------------
 app.all('*', (req, res, next) => {
   next(new Error(`Can't find ${req.originalUrl} on the server.`));
   // TODO - Install global AppError here.

@@ -5,13 +5,18 @@ const app = require('./app');
 
 dotenv.config({ path: './config.env' });
 
-//* Handles all uncaught exeptions
+//*---------------------------------------------
+//* Handle all uncaught exceptions
+//*---------------------------------------------
 process.on('uncaughtException', err => {
   console.log('Uncaught Rejection: App shutting down.');
   console.log(err.name, err.message);
   process.exit(1);
 });
 
+//*---------------------------------------------
+//* Connect to database
+//*---------------------------------------------
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
@@ -27,6 +32,9 @@ mongoose
     console.log(`[${new Date().toLocaleTimeString()}] Connected to database.`);
   });
 
+//*---------------------------------------------
+//* Start server
+//*---------------------------------------------
 const port = process.env.port || 2000;
 app.listen(port, () => {
   console.log(
