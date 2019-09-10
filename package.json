@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "test": "export NODE_ENV=test && nodemon --exec 'mocha */**.spec.js'"
+    "test": "find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,10 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
     "mocha": "^6.2.0",
-    "prettier": "^1.18.2"
+    "mockgoose": "^8.0.2",
+    "prettier": "^1.18.2",
+    "request": "^2.88.0",
+    "should": "^13.2.3"
   },
   "engines": {
     "node": ">=10.6.0"
