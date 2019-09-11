@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const authMiddleware = require('./authMiddleware');
+const userMethods = require('./userMethods');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -33,6 +34,7 @@ const userSchema = new mongoose.Schema({
 });
 
 authMiddleware.hashPassword(userSchema);
+userMethods.checkPasswordMatch(userSchema);
 
 const User = mongoose.model('User', userSchema);
 
