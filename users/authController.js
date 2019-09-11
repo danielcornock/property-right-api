@@ -7,12 +7,12 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password
   });
+  console.log(newUser);
 
   res.status(200).json({
     status: 'success',
     data: {
       data: newUser
-      //TODO - Create generalised response function
     }
   });
 });
