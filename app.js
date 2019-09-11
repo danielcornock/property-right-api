@@ -1,5 +1,6 @@
 const express = require('express');
 
+const globalErrorHandler = require('./errors/errorController');
 const userRouter = require('./users/userRoutes');
 
 const app = express();
@@ -19,5 +20,7 @@ app.all('*', (req, res, next) => {
   next(new Error(`Can't find ${req.originalUrl} on the server.`));
   // TODO - Install global AppError here.
 });
+
+app.use(globalErrorHandler);
 
 module.exports = app;

@@ -51,9 +51,10 @@ describe('Creating a new user', () => {
         .send(user)
         .then(res => {
           const body = res.body;
-          expect(res.statusCode).to.equal(500);
-          expect(body.message).to.equal('unsuccessful');
-          expect(body.error.name).to.equal('ValidationError');
+          expect(res.statusCode).to.equal(400);
+          expect(body.message).to.equal(
+            'Invalid input data. You must enter an email address!'
+          );
           done();
         })
         .catch(err => {
