@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const globalErrorHandler = require('./errors/errorController');
 const userRouter = require('./users/userRoutes');
@@ -7,6 +8,12 @@ const app = express();
 
 //* Body Parser *//
 app.use(express.json());
+//* CORS allow localhost
+app.use(
+  cors({
+    origin: 'http://localhost:4200'
+  })
+);
 
 //*---------------------------------------------
 //* App main router
