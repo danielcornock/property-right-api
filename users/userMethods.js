@@ -36,6 +36,8 @@ exports.createSendToken = (user, statusCode, res) => {
   res.status(statusCode).json({
     status: 'success',
     token,
-    user: user
+    data: {
+      user: user
+    }
   });
 };

@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const globalErrorHandler = require('./errors/errorController');
 const userRouter = require('./users/userRoutes');
+const propertyRouter = require('./properties/propertyRoutes');
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.use(
 //* App main router
 //*---------------------------------------------
 app.use('/api/v1/users', userRouter);
-
+app.use('/api/v1/properties', propertyRouter);
 //*---------------------------------------------
 //* Handle unrecognised route requests
 //*---------------------------------------------
