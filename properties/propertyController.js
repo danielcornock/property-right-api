@@ -19,7 +19,15 @@ exports.createNewProperty = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     data: {
-      data: doc
+      property: doc
     }
+  });
+});
+
+exports.deleteProperty = catchAsync(async (req, res, next) => {
+  await Property.findByIdAndDelete(req.params.id);
+  res.status(204).json({
+    status: 'success',
+    data: null
   });
 });

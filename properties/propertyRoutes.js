@@ -14,4 +14,12 @@ router
     propertyController.createNewProperty
   );
 
+router
+  .route('/:id')
+  .delete(
+    authController.authGuard,
+    propertyMiddleware.checkDocumentIsOwn,
+    propertyController.deleteProperty
+  );
+
 module.exports = router;
