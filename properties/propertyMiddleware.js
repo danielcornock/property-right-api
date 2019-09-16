@@ -2,13 +2,6 @@ const catchAsync = require('../errors/catchAsync');
 const AppError = require('../errors/AppError');
 const Property = require('./propertyModel');
 
-exports.setPropertyUserId = (req, res, next) => {
-  if (!req.body.user) {
-    req.body.user = req.user.id;
-  }
-  next();
-};
-
 exports.checkDocumentIsOwn = catchAsync(async (req, res, next) => {
   const documentToAmend = await Property.findById(req.params.id);
 

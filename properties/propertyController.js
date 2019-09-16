@@ -14,12 +14,12 @@ exports.getAllProperties = catchAsync(async (req, res, next) => {
 });
 
 exports.createNewProperty = catchAsync(async (req, res, next) => {
-  const doc = await Property.create(req.body);
+  const property = await Property.create(req.body);
 
   res.status(201).json({
     status: 'success',
     data: {
-      property: doc
+      property
     }
   });
 });
@@ -33,12 +33,12 @@ exports.deleteProperty = catchAsync(async (req, res, next) => {
 });
 
 exports.getProperty = catchAsync(async (req, res, next) => {
-  const doc = await Property.findById(req.params.id);
+  const property = await Property.findById(req.params.id);
 
   res.status(200).json({
     status: 'success',
     data: {
-      property: doc
+      property
     }
   });
 });

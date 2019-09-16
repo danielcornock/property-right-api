@@ -11,3 +11,8 @@ exports.hashPassword = userSchema => {
     next();
   });
 };
+
+exports.setBodyUserId = (req, res, next) => {
+  req.body.user = req.user.id;
+  next();
+};
