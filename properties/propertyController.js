@@ -31,3 +31,14 @@ exports.deleteProperty = catchAsync(async (req, res, next) => {
     data: null
   });
 });
+
+exports.getProperty = catchAsync(async (req, res, next) => {
+  const doc = await Property.findById(req.params.id);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      property: doc
+    }
+  });
+});

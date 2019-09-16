@@ -5,11 +5,11 @@ const authController = require('../users/authController');
 
 const router = express.Router();
 
+router.use(authController.authGuard);
 router
   .route('/')
-  .get(authController.authGuard, propertyController.getAllProperties)
+  .get(propertyController.getAllProperties)
   .post(
-    authController.authGuard,
     propertyMiddleware.setPropertyUserId,
     propertyController.createNewProperty
   );
@@ -17,9 +17,9 @@ router
 router
   .route('/:id')
   .delete(
-    authController.authGuard,
     propertyMiddleware.checkDocumentIsOwn,
     propertyController.deleteProperty
-  );
+  )
+  .get(propertyController.getProperty);
 
 module.exports = router;
