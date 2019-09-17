@@ -4,7 +4,7 @@ const todoController = require('./todoController');
 const authController = require('../users/authController');
 const authMiddleware = require('../users/authMiddleware');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.use(authController.authGuard);
 router
@@ -13,9 +13,5 @@ router
   .post(authMiddleware.setBodyUserId, todoController.createTodo);
 
 // TODO - this is messy - sort it out
-router
-  .route('/:id')
-  .delete(todoController.deleteTodo)
-  .get(todoController.getTodosByProperty);
-
+router.route('/:id').delete(todoController.deleteTodo);
 module.exports = router;

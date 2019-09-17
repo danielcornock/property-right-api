@@ -13,8 +13,13 @@ exports.createTodo = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllTodos = catchAsync(async (req, res, next) => {
-  const todos = await Todo.find({ user: req.user.id });
+  let filter = { user: req.user.id };
+  if (req.params.propertyId) {
+    filter.propertyId = req.params.propertyId;
+    console.log(filter);
+  }
 
+  const todos = await Todo.find(filter);
   res.status(200).json({
     status: 'success',
     data: {
@@ -29,15 +34,5 @@ exports.deleteTodo = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: 'success',
     data: null
-  });
-});
-
-exports.getTodosByProperty = catchAsync(async (req, res, next) => {
-  const todos = await Todo.find({ property: req.params.id });
-  res.status(200).json({
-    status: 'success',
-    data: {
-      todos
-    }
   });
 });

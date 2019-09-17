@@ -1,3 +1,5 @@
+const Property = require('./../properties/propertyModel');
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 
@@ -7,12 +9,13 @@ const todoSchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'You must be logged in to create a todo!']
   },
-  property: {
+  propertyId: {
     type: mongoose.Schema.ObjectId,
     ref: 'Property'
   },
+  propertyName: String,
   title: String,
-  due: Date,
+  date: String,
   severity: {
     type: String,
     enum: {
@@ -25,6 +28,15 @@ const todoSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
+});
+
+todoSchema.pre('save', async function(next) {
+  if (this.propertyId) {
+    const { name } = await Property.findById(this.propertyId);
+    this.propertyName = name;
+  }
+
+  next();
 });
 
 const Todo = mongoose.model('Todo', todoSchema);

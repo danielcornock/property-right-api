@@ -1,4 +1,5 @@
 const Property = require('./propertyModel');
+const Todo = require('./../todos/todoModel');
 const catchAsync = require('../errors/catchAsync');
 const AppError = require('../errors/AppError');
 
@@ -26,6 +27,8 @@ exports.createNewProperty = catchAsync(async (req, res, next) => {
 
 exports.deleteProperty = catchAsync(async (req, res, next) => {
   await Property.findByIdAndDelete(req.params.id);
+  await Todo.deleteMany({ propertyId: req.params.id });
+
   res.status(204).json({
     status: 'success',
     data: null
