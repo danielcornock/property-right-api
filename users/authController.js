@@ -58,7 +58,6 @@ exports.authGuard = catchAsync(async (req, res, next) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
   const currentUser = await User.findById(decoded.id);
-  console.log(currentUser);
 
   if (!currentUser) {
     return next(new AppError('This user no longer exists!', 401));
