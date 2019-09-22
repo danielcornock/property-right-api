@@ -4,10 +4,12 @@ const validator = require('validator');
 const propertySchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: [true, 'You must be logged in to post a property.']
   },
   name: String,
-  monthlyRent: Number
+  monthlyRent: Number,
+  imagePath: String
 });
 
 const Property = mongoose.model('Property', propertySchema);

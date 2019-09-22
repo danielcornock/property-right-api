@@ -2,6 +2,7 @@ const Property = require('./propertyModel');
 const Todo = require('./../todos/todoModel');
 const catchAsync = require('../errors/catchAsync');
 const AppError = require('../errors/AppError');
+const propertyMethods = require('./propertyMethods');
 
 exports.getAllProperties = catchAsync(async (req, res, next) => {
   const properties = await Property.find({ user: req.user.id });
@@ -15,6 +16,8 @@ exports.getAllProperties = catchAsync(async (req, res, next) => {
 });
 
 exports.createNewProperty = catchAsync(async (req, res, next) => {
+  req.body.imagePath = await propertyMethods.setImagePath(req);
+
   const property = await Property.create(req.body);
 
   res.status(201).json({

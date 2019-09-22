@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const AppError = require('./errors/AppError');
 const globalErrorHandler = require('./errors/errorController');
@@ -17,6 +18,8 @@ app.use(
     origin: 'http://localhost:4200'
   })
 );
+
+app.use('/images', express.static(path.join(__dirname, '/images')));
 
 app.use((req, res, next) => {
   console.log('API request made.');
