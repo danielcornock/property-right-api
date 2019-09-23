@@ -9,7 +9,7 @@ const propertySchema = new mongoose.Schema({
   },
   name: String,
   monthlyRent: Number,
-  imagePath: String
+  image: String
 });
 
 const Property = mongoose.model('Property', propertySchema);

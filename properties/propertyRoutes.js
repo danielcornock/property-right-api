@@ -24,9 +24,10 @@ router
 router
   .route('/:id')
   .delete(
-    propertyMiddleware.checkDocumentIsOwn,
+    // propertyMiddleware.checkDocumentIsOwn,
     propertyController.deleteProperty
   )
-  .get(propertyController.getProperty);
+  .get(propertyController.getProperty)
+  .put(imageUpload.single('image'), propertyController.editProperty);
 
 module.exports = router;
