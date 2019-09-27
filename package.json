@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "test": "find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000"
+    "start:local": "DB_PORT=27017 NODE_ENV=local nodemon server.js",
+    "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000"
   },
   "repository": {
     "type": "git",

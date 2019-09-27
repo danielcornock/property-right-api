@@ -1,20 +1,14 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const Mockgoose = require('mockgoose').Mockgoose;
 const statusInfo = require('./utilities/statusInfo');
 const mockgoose = new Mockgoose(mongoose);
+const config = require('./utilities/config');
 
-dotenv.config({ path: './config.env' });
-const environment = process.env.NODE_ENV;
-
-const DB = process.env.DATABASE.replace(
-  '<PASSWORD>',
-  process.env.DATABASE_PASSWORD
-);
+const DB = config.database(config.env);
 
 exports.connect = () => {
   return new Promise((resolve, reject) => {
-    if (process.env.NODE_ENV === 'test') {
+    if (config.env === 'test') {
       mockgoose.prepareStorage().then(() => {
         mongoose
           .connect(DB, {
@@ -24,7 +18,7 @@ exports.connect = () => {
           })
           .then((res, err) => {
             if (err) return reject(err);
-            statusInfo.timeLog(`Connected to ${environment} database.`);
+            statusInfo.timeLog(`Connected to ${config.env} database.`);
             resolve();
           });
       });
@@ -37,7 +31,7 @@ exports.connect = () => {
         })
         .then((res, err) => {
           if (err) return reject(err);
-          statusInfo.timeLog(`Connected to ${environment} database.`);
+          statusInfo.timeLog(`Connected to ${config.env} database.`);
           resolve();
         });
     }

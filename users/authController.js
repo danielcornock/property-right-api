@@ -5,6 +5,7 @@ const User = require('./userModel');
 const catchAsync = require('../errors/catchAsync');
 const AppError = require('../errors/AppError');
 const userMethods = require('./userMethods');
+const config = require('../utilities/config');
 
 //*---------------------------------------------
 //* SIGN UP NEW USER
@@ -55,7 +56,7 @@ exports.authGuard = catchAsync(async (req, res, next) => {
     );
   }
 
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const decoded = await promisify(jwt.verify)(token, config.jwtSecret);
 
   const currentUser = await User.findById(decoded.id);
 

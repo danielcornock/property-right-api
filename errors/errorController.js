@@ -1,4 +1,5 @@
 const AppError = require('./AppError');
+const config = require('../utilities/config');
 
 //*---------------------------------------------
 //* AVOID UNCAUGHT EXCEPTION ERRORS
@@ -67,12 +68,9 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
-  if (process.env.NODE_ENV === 'development') {
+  if (config.env === 'development') {
     sendErrorDev(err, res);
-  } else if (
-    process.env.NODE_ENV === 'production' ||
-    process.env.NODE_ENV === 'test'
-  ) {
+  } else if (config.env === 'production' || config.env === 'test') {
     //* By default, mongo errors are non-operational.
     //* However, we want the user to see error messages from mongoDB
     //* These handlers will make the errors operational
