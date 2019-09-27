@@ -13,5 +13,5 @@ router
   .post(authMiddleware.setBodyUserId, todoController.createTodo);
 
 // TODO - this is messy - sort it out
-router.route('/:id').delete(todoController.deleteTodo);
+router.route('/:id').delete(todoController.deleteTodo).put(todoController.updateTodo);
 module.exports = router;
