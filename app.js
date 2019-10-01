@@ -4,9 +4,11 @@ const path = require('path');
 
 const AppError = require('./errors/AppError');
 const globalErrorHandler = require('./errors/errorController');
+
 const userRouter = require('./users/userRoutes');
 const propertyRouter = require('./properties/propertyRoutes');
 const todoRouter = require('./todos/todoRoutes');
+const tenantRouter = require('./tenants/tenantRoutes');
 
 const app = express();
 
@@ -32,6 +34,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/properties', propertyRouter);
 app.use('/api/v1/todos', todoRouter);
+app.use('/api/v1/tenants', tenantRouter);
 //*---------------------------------------------
 //* Handle unrecognised route requests
 //*---------------------------------------------

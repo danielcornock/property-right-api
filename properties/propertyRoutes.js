@@ -5,12 +5,14 @@ const authController = require('../users/authController');
 const authMiddleware = require('../users/authMiddleware');
 
 const todoRouter = require('../todos/todoRoutes');
+const tenantRouter = require('../tenants/tenantRoutes');
 const imageUpload = require('../utilities/imageUpload');
 const router = express.Router();
 
 router.use(authController.authGuard);
 
 router.use('/:propertyId/todos', todoRouter);
+router.use('/:propertyId/tenants', tenantRouter);
 
 router
   .route('/')
