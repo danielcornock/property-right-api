@@ -56,10 +56,13 @@ tenantSchema.pre('save', async function setAvatarDetails(next) {
 });
 
 tenantSchema.virtual('avatar.initials').get(function getInitials() {
-  return this.name
-    .split(' ')
-    .reduce((total, x, index) => (index === 1 ? total[0] + x[0] : total + x[0]))
-    .toUpperCase();
+  const splitName = this.name.split(' ');
+  return (splitName.length === 1
+    ? splitName.join('')[0]
+    : splitName.reduce((total, x, index) =>
+        index === 1 ? total[0] + x[0] : total + x[0]
+      )
+  ).toUpperCase();
 });
 
 const Tenant = mongoose.model('Tenant', tenantSchema);
