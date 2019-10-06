@@ -1,4 +1,5 @@
 const multer = require('multer');
+const AppError = require('../errors/AppError');
 
 const MIME_TYPE_MAP = {
   'image/png': 'png',
@@ -9,7 +10,7 @@ const MIME_TYPE_MAP = {
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // const isValid = MIME_TYPE_MAP[file.mimetype];
-    // let error = new Error('Invalid mime type');
+    // let error = new AppError('Invalid file type', 400);
     // if (isValid) {
     //   error = null;
     // }

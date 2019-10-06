@@ -17,7 +17,6 @@ exports.getAllTodos = catchAsync(async (req, res, next) => {
   let filter = { user: req.user.id };
   if (req.params.propertyId) {
     filter.propertyId = req.params.propertyId;
-    console.log(filter);
   }
 
   const todos = await Todo.find(filter);
@@ -38,14 +37,14 @@ exports.deleteTodo = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateTodo = catchAsync((async (req, res, next) => {
+exports.updateTodo = catchAsync(async (req, res, next) => {
   const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
   });
 
   if (!todo) {
-    return next (new AppError('No todo found with that ID!', 404));
+    return next(new AppError('No todo found with that ID!', 404));
   }
 
   res.status(200).json({
@@ -53,5 +52,5 @@ exports.updateTodo = catchAsync((async (req, res, next) => {
     data: {
       todo
     }
-  })
-}))
+  });
+});

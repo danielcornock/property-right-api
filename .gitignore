@@ -64,3 +64,6 @@ config.env
 
 #images
 images/
+
+#dist
+/dist

@@ -21,7 +21,8 @@ app.use(
   })
 );
 
-app.use('/images', express.static(path.join(__dirname, '/images')));
+app.use('../images', express.static(path.join(__dirname, '../images')));
+console.log(path.join(__dirname, '/images'));
 
 app.use((req, res, next) => {
   console.log('API request made.');

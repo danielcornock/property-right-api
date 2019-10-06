@@ -7,7 +7,10 @@
     "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "start:local": "DB_PORT=27017 NODE_ENV=local nodemon server.js",
-    "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000"
+    "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000",
+    "build": "rm -R dist; tsc -p .; cp -av images dist",
+    "start:ts": "nodemon dist/server.js",
+    "watch-ts": "tsc -w"
   },
   "repository": {
     "type": "git",
@@ -30,6 +33,14 @@
     "validator": "^11.1.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.1",
+    "@types/mongodb": "^3.3.5",
+    "@types/mongoose": "^5.5.19",
+    "@types/morgan": "^1.7.37",
+    "@types/multer": "^1.3.10",
+    "@types/node": "^12.7.11",
+    "@types/validator": "^10.11.3",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "eslint": "^6.1.0",
@@ -46,7 +57,9 @@
     "prettier": "^1.18.2",
     "request": "^2.88.0",
     "should": "^13.2.3",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
   },
   "engines": {
     "node": ">=10.6.0"
