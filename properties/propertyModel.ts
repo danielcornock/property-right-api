@@ -2,7 +2,7 @@ import { Schema, Document, model, Model } from 'mongoose';
 import { INext } from '../utilities/interfaces/IMiddlewareParams';
 const validator = require('validator');
 
-export interface IPropertyModel extends Document {
+export interface IPropertyDocument extends Document {
   user: Schema.Types.ObjectId;
   name: string;
   monthlyRent: number;
@@ -27,7 +27,10 @@ const propertySchema: Schema = new Schema({
   ]
 });
 
-propertySchema.pre(/^find/ as any, function(this: Document, next: INext) {
+propertySchema.pre(/^find/ as any, function(
+  this: IPropertyDocument,
+  next: INext
+) {
   this.populate({
     path: 'tenants',
     select: 'name email phone avatar'
@@ -35,7 +38,7 @@ propertySchema.pre(/^find/ as any, function(this: Document, next: INext) {
   next();
 });
 
-const Property: Model<IPropertyModel> = model<IPropertyModel>(
+const Property: Model<IPropertyDocument> = model<IPropertyDocument>(
   'Property',
   propertySchema
 );

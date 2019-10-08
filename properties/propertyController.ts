@@ -2,7 +2,7 @@ import Property from './propertyModel';
 import Todo from './../todos/todoModel';
 import catchAsync from '../errors/catchAsync';
 import AppError from '../errors/AppError';
-import * as propertyMethods from '../services/fileService';
+import * as fileService from '../services/fileService';
 import * as databaseService from '../services/databaseService';
 import * as authorise from '../validation/authorise';
 import {
@@ -29,7 +29,7 @@ export const getAllProperties = catchAsync(
 
 export const createNewProperty = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
-    req.body.image = await propertyMethods.setImagePath(req);
+    req.body.image = await fileService.setImagePath(req);
     const property = await databaseService.create(Property, req.body);
 
     res.status(201).json({
@@ -44,7 +44,7 @@ export const createNewProperty = catchAsync(
 export const deleteProperty = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
     await databaseService.deleteOne(Property, {
-      id: req.params.id,
+      _id: req.params.id,
       user: req.user.id
     });
     await databaseService.deleteMany(Todo, {
@@ -85,7 +85,7 @@ export const getProperty = catchAsync(
 export const editProperty = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
     if (req.file) {
-      req.body.image = await propertyMethods.setImagePath(req);
+      req.body.image = await fileService.setImagePath(req);
     }
 
     const property = await Property.findByIdAndUpdate(

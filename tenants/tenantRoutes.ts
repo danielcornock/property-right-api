@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 
-const tenantController = require('./tenantController');
-const authController = require('../users/authController');
-const authMiddleware = require('../users/authMiddleware');
+import * as tenantController from './tenantController';
+import authController from '../users/authController';
+import authMiddleware from '../users/authMiddleware';
 
 const router = express.Router({ mergeParams: true });
 

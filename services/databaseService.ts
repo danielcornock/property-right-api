@@ -27,11 +27,13 @@ export async function findByIdAndDelete(
 export async function findByIdAndUpdate(
   Model: Model<any>,
   docId: string,
-  data: object
+  data: object,
+  options?: object
 ): Promise<any> {
   return Model.findByIdAndUpdate(docId, data, {
     new: true,
-    runValidators: true
+    runValidators: true,
+    ...options
   });
 }
 
