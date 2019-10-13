@@ -12,10 +12,12 @@ router
   .get(todoController.getAllTodos)
   .post(authMiddleware.setBodyUserId, todoController.createTodo);
 
+router.route('/todos-per-property').get(todoController.getTodosPerProperty);
+
 router
   .route('/:id')
+  .get(todoController.getTodo)
   .delete(todoController.deleteTodo)
   .put(todoController.updateTodo);
 
-router.route('/todos-per-property').get(todoController.getTodosPerProperty);
 module.exports = router;
