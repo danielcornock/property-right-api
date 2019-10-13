@@ -67,3 +67,26 @@ export const updateTodo = catchAsync(
     });
   }
 );
+
+export const getTodosPerProperty = catchAsync(
+  async (req: IRequest, res: IResponse, next: INext) => {
+    const propertyTodos = await Todo.aggregate([
+      {
+        $match: { propertyName: { $exists: true }, completed: { $ne: true } }
+      },
+      {
+        $group: {
+          _id: '$propertyId',
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        propertyTodos
+      }
+    });
+  }
+);

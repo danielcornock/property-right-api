@@ -17,4 +17,5 @@ router
   .delete(todoController.deleteTodo)
   .put(todoController.updateTodo);
 
+router.route('/todos-per-property').get(todoController.getTodosPerProperty);
 module.exports = router;

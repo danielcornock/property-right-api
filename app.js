@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const morgan = require('morgan');
 
 const AppError = require('./errors/AppError');
 const globalErrorHandler = require('./errors/errorController');
+const statusInfo = require('./utilities/statusInfo');
 
 const userRouter = require('./users/userRoutes');
 const propertyRouter = require('./properties/propertyRoutes');
@@ -21,13 +23,11 @@ app.use(
   })
 );
 
-app.use('/images', express.static(path.join(__dirname, '../images')));
-console.log(path.join(__dirname, '../images'));
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
 
-app.use((req, res, next) => {
-  console.log('API request made.');
-  next();
-});
+app.use('/images', express.static(path.join(__dirname, '../images')));
 
 //*---------------------------------------------
 //* App main router

@@ -16,7 +16,7 @@ export const getAllTenants = catchAsync(
       filter.propertyId = req.params.propertyId;
     }
 
-    const tenants = await Tenant.find(filter);
+    const tenants = await Tenant.find(filter).sort({ name: 1 });
     res.status(200).json({
       status: 'success',
       data: {
