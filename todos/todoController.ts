@@ -4,8 +4,9 @@ import {
   IResponse,
   INext
 } from '../utilities/interfaces/IMiddlewareParams';
-const catchAsync = require('../errors/catchAsync');
-const AppError = require('../errors/AppError');
+import catchAsync from '../errors/catchAsync';
+import AppError from '../errors/AppError';
+import * as databaseService from './../services/databaseService';
 
 export const createTodo = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
@@ -32,6 +33,18 @@ export const getAllTodos = catchAsync(
       status: 'success',
       data: {
         todos
+      }
+    });
+  }
+);
+
+export const getTodo = catchAsync(
+  async (req: IRequest, res: IResponse, next: INext) => {
+    const todo = await Todo.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      data: {
+        todo
       }
     });
   }

@@ -88,7 +88,7 @@ export const editProperty = catchAsync(
       req.body.image = await fileService.setImagePath(req);
     }
 
-    const property = await Property.findByIdAndUpdate(
+    const property = await databaseService.findByIdAndUpdate(
       Property,
       req.params.id,
       req.body
