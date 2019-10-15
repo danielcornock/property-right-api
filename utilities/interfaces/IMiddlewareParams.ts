@@ -1,4 +1,4 @@
-import { IUser } from './IUser';
+import { IUser } from './../../users/interfaces/IUser';
 import { Request, Response, NextFunction, Express } from 'express';
 
 export interface IRequest extends Request {

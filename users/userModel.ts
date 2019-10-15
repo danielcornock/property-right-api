@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const authMiddleware = require('./authMiddleware');
-const userMethods = require('./userMethods');
+import { Document, Schema, model, Model } from 'mongoose';
+import validator from 'validator';
+import * as authMiddleware from './authMiddleware';
+import * as userMethods from './userMethods';
+import bcrypt from 'bcryptjs';
+import { IUser } from '../users/interfaces/IUser';
+import { IPropertyDocument } from '../properties/propertyModel';
 
-const userSchema = new mongoose.Schema({
+const userSchema: Schema = new Schema({
   name: {
     type: String,
     required: [true, 'Please enter your name, so we know what to call you!'],
@@ -33,9 +36,18 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-authMiddleware.hashPassword(userSchema);
+userSchema.pre('save', async function(this: IUser, next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+
+  this.password = await bcrypt.hash(this.password, 12);
+
+  next();
+});
+
 userMethods.checkPasswordMatch(userSchema);
 
-const User = mongoose.model('User', userSchema);
+const User: Model<IUser> = model<IUser>('User', userSchema);
 
-module.exports = User;
+export default User;

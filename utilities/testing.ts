@@ -1,12 +1,12 @@
 const db = require('../db');
 
-exports.setupDatabase = done => {
+export const setupDatabase = done => {
   db.connect()
     .then(() => done())
     .catch(err => done(err));
 };
 
-exports.closeDatabase = done => {
+export const closeDatabase = done => {
   db.close()
     .then(() => done())
     .catch(err => done(err));

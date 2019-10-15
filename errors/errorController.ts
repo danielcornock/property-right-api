@@ -6,20 +6,20 @@ const config = require('../utilities/config');
 //*---------------------------------------------
 
 //* Handle casting errors
-const handleCastErrorDB = err => {
+const handleCastErrorDB = (err: Err) => {
   const message = `Invalid ${err.path}: ${err.value}.`;
   return new AppError(message, 400);
 };
 
 //* Handle duplicate field errors
-const handleDuplicateFieldsDB = err => {
+const handleDuplicateFieldsDB = (err: Error) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
   const message = `This user already exists!`;
   return new AppError(message, 400);
 };
 
 //* Handle database validation error
-const handleValidationErrorDB = err => {
+const handleValidationErrorDB = (err: Error) => {
   const errors = Object.values(err.errors).map(el => el.message);
   const message = `Invalid input data. ${errors.join('. ')}`;
   return new AppError(message, 400);

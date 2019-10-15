@@ -1,13 +1,13 @@
-const app = require('./app');
-const db = require('./db');
-const statusInfo = require('./utilities/statusInfo');
-const config = require('./utilities/config');
+import app from './app';
+import * as db from './db';
+import timeLog from './utilities/statusInfo';
+import * as config from './utilities/config';
 //*---------------------------------------------
 //* Handle all uncaught exceptions
 //*---------------------------------------------
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
-  statusInfo.timeLog('Uncaught rejection! App shutting down.');
+  timeLog('Uncaught rejection! App shutting down.');
   process.exit(1);
 });
 
@@ -16,9 +16,7 @@ process.on('uncaughtException', err => {
 //*---------------------------------------------
 db.connect().then(() => {
   app.listen(config.port, () => {
-    statusInfo.timeLog(
-      `Server started on port ${config.port} in ${config.env} mode.`
-    );
+    timeLog(`Server started on port ${config.port} in ${config.env} mode.`);
   });
 });
 

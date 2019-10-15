@@ -1,5 +1,5 @@
-const multer = require('multer');
-const AppError = require('../errors/AppError');
+import multer from 'multer';
+import AppError from '../errors/AppError';
 
 const MIME_TYPE_MAP = {
   'image/png': 'png',
@@ -27,4 +27,4 @@ const storage = multer.diskStorage({
   }
 });
 
-module.exports = multer({ storage: storage });
+export default multer({ storage: storage });

@@ -1,8 +1,8 @@
 import express from 'express';
 import * as propertyController from './propertyController';
 import * as authorise from '../validation/authorise';
-import authController from '../users/authController';
-import authMiddleware from '../users/authMiddleware';
+import * as authController from '../users/authController';
+import * as authMiddleware from '../users/authMiddleware';
 
 import todoRouter from '../todos/todoRoutes';
 import tenantRouter from '../tenants/tenantRoutes';
@@ -17,11 +17,7 @@ router.use('/:propertyId/tenants', tenantRouter);
 router
   .route('/')
   .get(propertyController.getAllProperties)
-  .post(
-    imageUpload.single('image'),
-    authMiddleware.setBodyUserId,
-    propertyController.createNewProperty
-  );
+  .post(imageUpload.single('image'), propertyController.createNewProperty);
 
 router
   .route('/:id')
@@ -29,4 +25,4 @@ router
   .get(propertyController.getProperty)
   .put(imageUpload.single('image'), propertyController.editProperty);
 
-module.exports = router;
+export default router;

@@ -1,9 +1,10 @@
 import Property from './propertyModel';
 import Todo from './../todos/todoModel';
-import catchAsync from '../errors/catchAsync';
+import { catchAsync } from '../errors/catchAsync';
 import AppError from '../errors/AppError';
 import * as fileService from '../services/fileService';
 import * as databaseService from '../services/databaseService';
+import * as authService from './../users/authMiddleware';
 import * as authorise from '../validation/authorise';
 import {
   IRequest,
@@ -15,7 +16,7 @@ export const getAllProperties = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
     const properties = await databaseService.findAllByUser(
       Property,
-      req.user.id
+      req.user._id
     );
 
     res.status(200).json({
@@ -29,6 +30,7 @@ export const getAllProperties = catchAsync(
 
 export const createNewProperty = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
+    req.body.user = authService.setBodyUserId(req);
     req.body.image = await fileService.setImagePath(req);
     const property = await databaseService.create(Property, req.body);
 
@@ -45,11 +47,11 @@ export const deleteProperty = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
     await databaseService.deleteOne(Property, {
       _id: req.params.id,
-      user: req.user.id
+      user: req.user._id
     });
     await databaseService.deleteMany(Todo, {
       propertyId: req.params.id,
-      user: req.user.id
+      user: req.user._id
     });
 
     res.status(204).json({
@@ -66,7 +68,7 @@ export const getProperty = catchAsync(
     if (!property) {
       return next(new AppError('Cannot find property.', 404));
     } else if (
-      !authorise.checkRequestIsAuthorised(property.user, req.user.id)
+      !authorise.checkRequestIsAuthorised(property.user, req.user._id)
     ) {
       return next(
         new AppError('You are not authorised to view this document.', 401)

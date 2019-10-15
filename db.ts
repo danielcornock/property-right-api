@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
-const Mockgoose = require('mockgoose').Mockgoose;
-const statusInfo = require('./utilities/statusInfo');
-const mockgoose = new Mockgoose(mongoose);
-const config = require('./utilities/config');
+import mongoose = require('mongoose');
+import { Mockgoose } from 'mockgoose';
+import timeLog from './utilities/statusInfo';
+import * as config from './utilities/config';
 
+const mockgoose = new Mockgoose(mongoose);
 const DB = config.database(config.env);
 
-exports.connect = () => {
+export const connect = () => {
   return new Promise((resolve, reject) => {
     if (config.env === 'test') {
       mockgoose.prepareStorage().then(() => {
@@ -18,7 +18,7 @@ exports.connect = () => {
           })
           .then((res, err) => {
             if (err) return reject(err);
-            statusInfo.timeLog(`Connected to ${config.env} database.`);
+            timeLog(`Connected to ${config.env} database.`);
             resolve();
           });
       });
@@ -31,13 +31,13 @@ exports.connect = () => {
         })
         .then((res, err) => {
           if (err) return reject(err);
-          statusInfo.timeLog(`Connected to ${config.env} database.`);
+          timeLog(`Connected to ${config.env} database.`);
           resolve();
         });
     }
   });
 };
 
-exports.close = () => {
+export const close = () => {
   return mongoose.disconnect();
 };

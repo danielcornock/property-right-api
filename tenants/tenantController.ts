@@ -1,5 +1,5 @@
 import Tenant, { ITenantDocument, ITenant } from './tenantModel';
-import catchAsync from '../errors/catchAsync';
+import { catchAsync } from '../errors/catchAsync';
 import AppError from '../errors/AppError';
 import Property from '../properties/propertyModel';
 import {
@@ -8,10 +8,11 @@ import {
   INext
 } from '../utilities/interfaces/IMiddlewareParams';
 import * as databaseService from './../services/databaseService';
+import * as authService from './../users/authMiddleware';
 
 export const getAllTenants = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
-    let filter: Partial<ITenant> = { user: req.user.id };
+    let filter: Partial<ITenant> = { user: req.user._id };
     if (req.params.propertyId) {
       filter.propertyId = req.params.propertyId;
     }
@@ -41,6 +42,7 @@ export const getTenant = catchAsync(
 
 export const createTenant = catchAsync(
   async (req: IRequest, res: IResponse, next: INext) => {
+    req.body.user = authService.setBodyUserId(req);
     const tenant = await databaseService.create(Tenant, req.body);
 
     if (req.body.propertyId) {

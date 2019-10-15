@@ -1,16 +1,16 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const morgan = require('morgan');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import morgan from 'morgan';
 
-const AppError = require('./errors/AppError');
-const globalErrorHandler = require('./errors/errorController');
-const statusInfo = require('./utilities/statusInfo');
+import AppError from './errors/AppError';
+import globalErrorHandler from './errors/errorController';
+import statusInfo from './utilities/statusInfo';
 
-const userRouter = require('./users/userRoutes');
-const propertyRouter = require('./properties/propertyRoutes');
-const todoRouter = require('./todos/todoRoutes');
-const tenantRouter = require('./tenants/tenantRoutes');
+import userRouter from './users/userRoutes';
+import propertyRouter from './properties/propertyRoutes';
+import todoRouter from './todos/todoRoutes';
+import tenantRouter from './tenants/tenantRoutes';
 
 const app = express();
 
@@ -45,4 +45,4 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports = app;
+export default app;
