@@ -11,7 +11,8 @@
     "build": "rm -R dist; tsc -p .; cp -av images dist",
     "start:ts": "nodemon dist/server.js",
     "watch-ts": "tsc -w",
-    "dev": "ts-node-dev --respawn --transpileOnly ./server.ts"
+    "dev": "ts-node-dev --respawn --transpileOnly ./server.ts",
+    "dev-new": "ts-node-dev --respawn --transpileOnly ./zv2/server.ts"
   },
   "repository": {
     "type": "git",
@@ -63,9 +64,8 @@
     "should": "^13.2.3",
     "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
-    "ts-node-dev": "^1.0.0-pre.43",
     "tslint": "^5.20.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.4"
   },
   "engines": {
     "node": ">=10.6.0"

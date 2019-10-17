@@ -32,6 +32,7 @@ app.use('/images', express.static(path.join(__dirname, '../images')));
 //*---------------------------------------------
 //* App main router
 //*---------------------------------------------
+console.log(propertyRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/properties', propertyRouter);
 app.use('/api/v1/todos', todoRouter);
