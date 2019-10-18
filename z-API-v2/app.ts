@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { Middleware } from './middleware';
+import { Middleware } from './config/appMiddleware';
 
 import { Routes } from './routes';
 import * as config from '../utilities/config';

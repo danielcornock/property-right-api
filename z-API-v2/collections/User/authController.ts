@@ -3,39 +3,34 @@ import {
   IResponse,
   INext
 } from '../../../utilities/interfaces/IMiddlewareParams';
-import User from './User';
-import * as userMethods from './User';
-import { IUser } from './interfaces/Iuser';
-import databaseService from '../../services/databaseService';
+import authService from './authService';
 
 export class AuthController {
   public async signup(req: IRequest, res: IResponse, next: INext) {
-    const user = await databaseService.create(User, {
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      accountCreated: Date.now()
+    const { name, email, password } = req.body;
+    const user = await authService.createUser({
+      name,
+      email,
+      password
     });
 
-    userMethods.createSendToken(user, res);
+    authService.createSendToken(user, res);
   }
 
   public async login(req: IRequest, res: IResponse, next: INext) {
     const { email, password } = req.body;
+    let error: string;
 
-    if (!email) return next(new Error('No email specified.'));
+    error = authService.checkForAbsentFields(email, password);
+    if (error) return next(new Error(error));
 
-    if (!password) return next(new Error('No password specified.'));
-
-    const user: Partial<IUser> = await databaseService.findUser(User, {
-      email
-    });
+    const user = await authService.login(email);
 
     if (!user) return next(new Error('Incorrect email address.'));
 
-    if (!(await userMethods.checkPasswordForValidity(password, user.password)))
+    if (!(await authService.checkPasswordForValidity(password, user.password)))
       return next(new Error('Incorrect password.'));
 
-    userMethods.createSendToken(user, res);
+    authService.createSendToken(user, res);
   }
 }

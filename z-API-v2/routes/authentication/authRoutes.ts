@@ -1,16 +1,12 @@
-import { AbstractRoutes } from '../abstract/abstractRoutes';
-import { Router } from 'express';
+import { BaseRoutes } from '../abstract/baseRoutes';
 import { AuthController } from '../../collections/User/authController';
-import PropertyController from '../../collections/Property/propertyController';
 
-export class AuthRoutes extends AbstractRoutes {
-  public router: Router;
+export class AuthRoutes extends BaseRoutes {
   private _authController: AuthController;
 
   constructor() {
     super();
     this._authController = new AuthController();
-    this.router = Router();
     this._assignRoutes();
   }
 
@@ -20,4 +16,4 @@ export class AuthRoutes extends AbstractRoutes {
   }
 }
 
-export default new AuthRoutes().router;
+export default new AuthRoutes().routes;

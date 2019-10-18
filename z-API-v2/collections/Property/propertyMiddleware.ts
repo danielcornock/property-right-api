@@ -13,7 +13,6 @@ export class PropertyMiddleware {
       this: Document,
       next: INext
     ) {
-      console.log('yo');
       // this.populate({
       //   path: 'tenants',
       //   select: 'name email phone avatar'

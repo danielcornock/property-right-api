@@ -1,8 +1,7 @@
-import { promisify } from 'util';
 import jwt from 'jsonwebtoken';
+import { promisify } from 'util';
 
-import User from './User';
-
+import User from './userModel';
 import {
   IRequest,
   IResponse,

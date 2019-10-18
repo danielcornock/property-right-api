@@ -9,7 +9,7 @@
     "start:local": "DB_PORT=27017 NODE_ENV=local nodemon server.js",
     "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000",
     "build": "rm -R dist; tsc -p .; cp -av images dist",
-    "start:ts": "nodemon dist/server.js",
+    "start:ts": "nodemon dist/z-API-v2/server.js",
     "watch-ts": "tsc -w",
     "dev": "ts-node-dev --respawn --transpileOnly ./server.ts",
     "dev-new": "ts-node-dev --respawn --transpileOnly ./zv2/server.ts"

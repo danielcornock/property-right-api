@@ -4,13 +4,12 @@ import {
   INext
 } from '../../../utilities/interfaces/IMiddlewareParams';
 import express, { Router } from 'express';
-import { AbstractRoutes } from '../abstract/abstractRoutes';
+import { BaseRoutes } from '../abstract/baseRoutes';
+import { GuardedRoutes } from '../abstract/guardedRoutes';
 
-export class TodoRoutes extends AbstractRoutes {
-  public router: Router;
+export class TodoRoutes extends GuardedRoutes {
   constructor() {
     super();
-    this.router = express.Router();
     this._assignRoutes();
   }
 
@@ -23,4 +22,4 @@ export class TodoRoutes extends AbstractRoutes {
   }
 }
 
-export default new TodoRoutes().router;
+export default new TodoRoutes().routes;

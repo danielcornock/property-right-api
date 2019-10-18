@@ -1,32 +1,33 @@
-import {
-  IRequest,
-  IResponse,
-  INext
-} from '../../../utilities/interfaces/IMiddlewareParams';
 import todoRoutes from '../todo/todoRoutes';
-import { Router } from 'express';
 import PropertyController from '../../collections/Property/propertyController';
-import { AbstractRoutes } from '../abstract/abstractRoutes';
-import authMiddleware from '../../collections/User/authMiddleware';
+import { GuardedRoutes } from '../abstract/guardedRoutes';
+import fileService from '../../services/fileService';
 
-export class PropertyRoutes extends AbstractRoutes {
-  private _propertyController: PropertyController;
+class PropertyRoutes extends GuardedRoutes {
+  private controller: PropertyController;
 
   constructor() {
     super();
-    this._propertyController = new PropertyController();
-    this._useExternalRoutes();
+    this.controller = new PropertyController();
     this._assignRoutes();
-    this.router.use(authMiddleware.authGuard);
+    this._useExternalRoutes();
   }
 
-  public _assignRoutes(): void {
-    this.router.get('/', this._propertyController.getAll);
+  protected _assignRoutes(): void {
+    this.router.get('/', this.controller.getAllProperties);
+
+    this.router.post('/', fileService.multer().single('image'), this.controller.createProperty);
+
+    this.router.get('/:propertyId', this.controller.getProperty);
+
+    this.router.delete('/:propertyId', this.controller.deleteProperty);
+
+    this.router.put('/:propertyId', fileService.multer().single('image'), this.controller.updateProperty);
   }
 
-  public _useExternalRoutes(): void {
-    this.router.use('/todos', todoRoutes);
+  private _useExternalRoutes(): void {
+    this.router.use('/:propertyId/todos', todoRoutes);
   }
 }
 
-export default new PropertyRoutes().router;
+export default new PropertyRoutes().routes;

@@ -26,6 +26,10 @@ class ResponseService {
       }
     });
   }
+
+  public successDelete(res: IResponse) {
+    res.status(204).send();
+  }
 }
 
 export default new ResponseService();
