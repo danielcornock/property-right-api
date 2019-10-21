@@ -1,48 +1,39 @@
 import express from 'express';
-import cors from 'cors';
-import path from 'path';
-import morgan from 'morgan';
+import mongoose from 'mongoose';
+import { Middleware } from './config/appMiddleware';
 
-import AppError from './errors/AppError';
-import globalErrorHandler from './errors/errorController';
-import statusInfo from './utilities/statusInfo';
+import { Routes } from './routes';
+import * as config from './config/config';
 
-import userRouter from './users/userRoutes';
-import propertyRouter from './properties/propertyRoutes';
-import todoRouter from './todos/todoRoutes';
-import tenantRouter from './tenants/tenantRoutes';
+class App {
+  public app: express.Application;
+  public routeConfig: Routes;
 
-const app = express();
+  constructor() {
+    this.app = express();
+    this.config();
+    this.mongoSetup();
+    this.routeConfig = new Routes(this.app);
+  }
 
-//* Body Parser *//
-app.use(express.json());
-//* CORS allow localhost
-app.use(
-  cors({
-    origin: 'http://localhost:4200'
-  })
-);
+  private config(): void {
+    new Middleware(this.app);
+  }
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use(morgan('dev'));
+  private mongoSetup(): void {
+    mongoose
+      .connect(config.database(config.env), {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false
+      })
+      .then(() => {
+        console.log('[!] Connected to database.');
+      })
+      .catch(() => {
+        console.error('[!][!] Error connecting to database.');
+      });
+  }
 }
 
-app.use('/images', express.static(path.join(__dirname, '../images')));
-
-//*---------------------------------------------
-//* App main router
-//*---------------------------------------------
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/properties', propertyRouter);
-app.use('/api/v1/todos', todoRouter);
-app.use('/api/v1/tenants', tenantRouter);
-//*---------------------------------------------
-//* Handle unrecognised route requests
-//*---------------------------------------------
-app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on the server.`, 404));
-});
-
-app.use(globalErrorHandler);
-
-export default app;
+export default new App().app;
