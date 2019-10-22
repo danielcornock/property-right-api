@@ -14,7 +14,7 @@ class PropertyRoutes extends GuardedRoutes {
     this._useExternalRoutes();
   }
 
-  protected _assignRoutes(): void {
+  protected _assignRoutes() {
     this.router.get('/', this.controller.getAllProperties);
 
     this.router.post('/', fileService.multer().single('image'), this.controller.createProperty);

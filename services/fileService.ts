@@ -1,4 +1,4 @@
-import { IRequest } from '../../utilities/interfaces/IMiddlewareParams';
+import { IRequest } from '../config/interfaces/IMiddlewareParams';
 import multer from 'multer';
 
 class FileService {

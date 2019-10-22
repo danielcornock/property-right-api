@@ -10,6 +10,6 @@ export default class DatabaseService extends AbstractDatabaseService {
   public async findMany(userId: string, params: FetchQuery = {}): Promise<any> {
     console.log('hi');
     params = this._setUser(params, userId);
-    return this._model.find(params);
+    return await this._model.find(params);
   }
 }

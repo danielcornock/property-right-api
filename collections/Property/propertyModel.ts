@@ -1,4 +1,4 @@
-import { Schema, models, model, Model, Document } from 'mongoose';
+import { Schema, models, model } from 'mongoose';
 import { PropertyMiddleware } from './propertyMiddleware';
 
 //*---------------------------------------------
