@@ -1,4 +1,4 @@
-import { IRequest, IResponse, INext } from '../../../utilities/interfaces/IMiddlewareParams';
+import { IRequest, IResponse, INext } from '../../config/interfaces/IMiddlewareParams';
 import authService from './authService';
 
 export class AuthController {

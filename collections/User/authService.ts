@@ -6,19 +6,19 @@ import { IResponse } from '../../config/interfaces/IMiddlewareParams';
 import { IUser } from './interfaces/IUser';
 import * as config from '../../config/config';
 import User from './userModel';
+import DatabaseService from '../../services/database/databaseService';
+
+const _userDataService: UserDatabaseService = new UserDatabaseService(User);
 
 class AuthService {
-  private _userDataService: UserDatabaseService;
-  constructor() {
-    this._userDataService = new UserDatabaseService(User);
-  }
+  constructor() {}
 
   public async createUser(user: any): Promise<any> {
-    return await this._userDataService.create(user);
+    return await _userDataService.create(user);
   }
 
   public async login(email: string) {
-    return await this._userDataService.findOne({ email });
+    return await _userDataService.findOne({ email });
   }
 
   public createSendToken(user: IUser, res: IResponse): void {

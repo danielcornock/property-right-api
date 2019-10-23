@@ -12,33 +12,39 @@ export interface ITodo extends Document {
   completed: boolean;
 }
 
-const todoSchema = new mongoose.Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'You must be logged in to create a todo!']
-  },
-  propertyId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Property'
-  },
-  propertyName: String,
-  title: String,
-  date: Date,
-  severity: {
-    type: String,
-    enum: {
-      values: ['easy', 'moderate', 'severe', ''],
-      message: 'Difficulty must be either easy, moderate or severe'
+const todoSchema = new mongoose.Schema(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'You must be logged in to create a todo!']
     },
-    required: false
+    propertyId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Property'
+    },
+    propertyName: String,
+    title: String,
+    date: Date,
+    severity: {
+      type: String,
+      enum: {
+        values: ['easy', 'moderate', 'severe', ''],
+        message: 'Difficulty must be either easy, moderate or severe'
+      },
+      required: false
+    },
+    completed: {
+      type: Boolean,
+      default: false
+    }
   },
-  completed: {
-    type: Boolean,
-    default: false
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
-});
+);
 
 new TodoQueryMiddleware(todoSchema);
 
-export default models.Todo || model('Todo', todoSchema);
+export default models.Todo || model('Todo', todoSchema, 'Todo');

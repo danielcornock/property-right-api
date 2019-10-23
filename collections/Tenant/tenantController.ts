@@ -6,13 +6,11 @@ import Property from '../Property/propertyModel';
 import Tenant from './tenantModel';
 import DatabaseService from '../../services/database/databaseService';
 
+const _tenantDataService: DatabaseService = new DatabaseService(Tenant);
+const _propertyDataService: DatabaseService = new DatabaseService(Property);
+
 export class TenantController {
-  private _tenantDataService: DatabaseService;
-  private _propertyDataService: DatabaseService;
-  contructor() {
-    this._tenantDataService = new DatabaseService(Tenant);
-    this._propertyDataService = new DatabaseService(Property);
-  }
+  contructor() {}
 
   public async getAllTenants(req: IRequest, res: IResponse): Promise<void> {
     let query: any = {};
@@ -20,22 +18,24 @@ export class TenantController {
       query.propertyId = req.params.propertyId;
     }
 
-    const tenants: Array<ITenant> = await this._tenantDataService.findMany(req.user._id, query);
+    const tenants: Array<ITenant> = await _tenantDataService
+      .findMany(req.user._id, query)
+      .populate('todoCount');
 
     responseService.successFind(res, { tenants: tenants });
   }
 
   public async getTenant(req: IRequest, res: IResponse): Promise<void> {
-    const tenant: ITenant = await this._tenantDataService.findOne(req.user._id, { _id: req.params.tenantId });
+    const tenant = await _tenantDataService.findOne(req.user._id, { _id: req.params.tenantId });
 
     responseService.successFind(res, { tenant: tenant });
   }
 
   public async createTenant(req: IRequest, res: IResponse): Promise<void> {
-    const tenant: ITenant = await this._tenantDataService.create(req.user._id, req.body);
+    const tenant: ITenant = await _tenantDataService.create(req.user._id, req.body);
 
     if (req.body.propertyId) {
-      await this._propertyDataService.update(req.user._id, req.body.propertyId, {
+      await _propertyDataService.update(req.user._id, req.body.propertyId, {
         $push: { tenants: tenant._id }
       });
     }
@@ -44,10 +44,10 @@ export class TenantController {
   }
 
   public async deleteTenant(req: IRequest, res: IResponse): Promise<void> {
-    await this._tenantDataService.delete(req.user._id, { id: req.params.tenantId });
+    await _tenantDataService.delete(req.user._id, { id: req.params.tenantId });
 
     if (req.body.propertyId) {
-      await this._propertyDataService.update(req.user._id, req.body.propertyId, {
+      await _propertyDataService.update(req.user._id, req.body.propertyId, {
         $pull: { tenants: req.params.tenantId }
       });
     }
@@ -56,18 +56,14 @@ export class TenantController {
   }
 
   public async updateTenant(req: IRequest, res: IResponse): Promise<void> {
-    const oldData: ITenant = await this._tenantDataService.findOne(req.user._id, {
+    const oldData: any = await _tenantDataService.findOne(req.user._id, {
       _id: req.params.tenantId
     });
 
-    const newData: ITenant = await this._tenantDataService.update(
-      req.user._id,
-      req.params.tenantId,
-      req.body
-    );
+    const newData: any = await _tenantDataService.update(req.user._id, req.params.tenantId, req.body);
 
     if (newData.propertyId !== oldData.propertyId) {
-      await this._propertyDataService.update(req.user._id, req.body.propertyId, {
+      await _propertyDataService.update(req.user._id, req.body.propertyId, {
         $pull: { tenants: oldData._id },
         $push: { tenants: newData._id }
       });

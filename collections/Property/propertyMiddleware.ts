@@ -1,5 +1,9 @@
 import { Document, Schema } from 'mongoose';
-import { INext } from '../../../utilities/interfaces/IMiddlewareParams';
+import { INext } from '../../config/interfaces/IMiddlewareParams';
+import DatabaseService from '../../services/database/databaseService';
+import Todo from '../Todo/todoModel';
+
+const _todoDataService: DatabaseService = new DatabaseService(Todo);
 
 export class PropertyMiddleware {
   private _propertySchema: Schema;
@@ -9,6 +13,7 @@ export class PropertyMiddleware {
   }
 
   private _populateTenantInfo() {
+    console.log('hey');
     this._propertySchema.pre(/^find/ as any, function(this: Document, next: INext) {
       this.populate({
         path: 'tenants',

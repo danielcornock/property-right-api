@@ -1,24 +1,37 @@
-import { Schema, models, model } from 'mongoose';
+import mongoose, { Schema, model, Model, Document, models, Mongoose } from 'mongoose';
 import { PropertyMiddleware } from './propertyMiddleware';
 
 //*---------------------------------------------
 //* Model Definition
 //*---------------------------------------------
-const propertySchema: Schema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'You must be logged in to post a property.']
-  },
-  name: String,
-  monthlyRent: Number,
-  image: String,
-  tenants: [
-    {
+const propertySchema = new mongoose.Schema(
+  {
+    user: {
       type: Schema.Types.ObjectId,
-      ref: 'Tenant'
-    }
-  ]
+      ref: 'User',
+      required: [true, 'You must be logged in to post a property.']
+    },
+    name: String,
+    monthlyRent: Number,
+    image: String,
+    tenants: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Tenant'
+      }
+    ]
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+);
+
+propertySchema.virtual('todoCount', {
+  ref: 'Todo',
+  foreignField: 'propertyId',
+  localField: '_id',
+  count: true
 });
 
 new PropertyMiddleware(propertySchema);

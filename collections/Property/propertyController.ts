@@ -5,19 +5,36 @@ import Property from './propertyModel';
 import DatabaseService from '../../services/database/databaseService';
 import Todo from '../Todo/todoModel';
 import { Error } from 'mongoose';
+import propertyService from './propertyService';
+
+const _propertyDataService: DatabaseService = new DatabaseService(Property);
+const _todoDataService: DatabaseService = new DatabaseService(Todo);
 
 export default class PropertyController {
-  private _propertyDataService: DatabaseService;
-  private _todoDataService: DatabaseService;
-
-  constructor() {
-    this._propertyDataService = new DatabaseService(Property);
-    this._todoDataService = new DatabaseService(Todo);
-  }
+  constructor() {}
 
   public async getAllProperties(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const properties = await this._propertyDataService.findMany(req.user._id);
+      // const properties = await _propertyDataService
+      //   .findMany(req.user._id)
+      //   .populate('todoCount')
+      //   .exec();
+      const properties = await _propertyDataService
+        .findMany(req.user._id)
+        .populate('todoCount')
+        .exec();
+      // const todos = await _todoDataService.aggregate([
+      //   {
+      //     $match: { propertyName: { $exists: true }, completed: { $ne: true } }
+      //   },
+      //   {
+      //     $group: {
+      //       _id: '$propertyId',
+      //       count: { $sum: 1 }
+      //     }
+      //   }
+      // ]);
+      // const fusedData = propertyService.combinePropertiesAndTodos(properties, todos);
       resService.successFind(res, { properties: properties });
     } catch (e) {
       return next(new Error('Cannot fetch properties'));
@@ -26,7 +43,7 @@ export default class PropertyController {
 
   public async getProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const property = await this._propertyDataService.findOne(req.user._id, {
+      const property = await _propertyDataService.findOne(req.user._id, {
         _id: req.params.propertyId
       });
       resService.successFind(res, { property: property });
@@ -37,17 +54,18 @@ export default class PropertyController {
 
   public async createProperty(req: IRequest, res: IResponse): Promise<void> {
     req.body.image = await fileService.setImagePath(req);
-    const property = await this._propertyDataService.create(req.user._id, req.body);
-
+    console.log(req.body);
+    const property = await _propertyDataService.create(req.user._id, req.body);
+    console.log(property);
     resService.successCreate(res, { property: property });
   }
 
   public async deleteProperty(req: IRequest, res: IResponse): Promise<void> {
-    await this._propertyDataService.delete(req.user._id, {
+    await _propertyDataService.delete(req.user._id, {
       _id: req.params.propertyId
     });
 
-    await this._todoDataService.deleteMany(req.user._id, {
+    await _todoDataService.deleteMany(req.user._id, {
       propertyId: req.params.propertyId
     });
 
@@ -57,11 +75,7 @@ export default class PropertyController {
   public async updateProperty(req: IRequest, res: IResponse): Promise<void> {
     if (req.file) req.body.image = await fileService.setImagePath(req);
 
-    const updatedProperty = await this._propertyDataService.update(
-      req.user._id,
-      req.params.propertyId,
-      req.body
-    );
+    const updatedProperty = await _propertyDataService.update(req.user._id, req.params.propertyId, req.body);
 
     resService.successCreate(res, { property: updatedProperty });
   }

@@ -1,22 +1,23 @@
 import { Schema } from 'mongoose';
-import Property from '../../deprecated/properties/propertyModel';
+import Property from '../../collections/Property/propertyModel';
 import { INext } from '../../config/interfaces/IMiddlewareParams';
 import DatabaseService from '../../services/database/databaseService';
 
+const _propertyDataService: DatabaseService = new DatabaseService(Property);
 export class TodoQueryMiddleware {
   private readonly _todoSchema: Schema;
-  private readonly _propertyDataService: DatabaseService;
 
   constructor(todoSchema: Schema) {
-    this._propertyDataService = new DatabaseService(Property);
     this._todoSchema = todoSchema;
+    this._fetchPropertyName();
   }
 
-  public async fetchPropertyName() {
+  private async _fetchPropertyName() {
     this._todoSchema.pre('save', async function(this: any, next: INext) {
       if (this.propertyId) {
-        const property = await this._propertyDataService.findOne('', { _id: this.propertyId });
+        const property: any = await _propertyDataService.findOne('', { _id: this.propertyId });
         this.propertyName = property.name;
+        console.log(property.name);
       }
 
       next();
