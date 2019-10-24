@@ -32,10 +32,14 @@ export class TodoController {
 
   public async updateTodo(req: IRequest, res: IResponse): Promise<void> {
     const oldTodo: any = await _todoDataService.findOne(req.user._id, { _id: req.params.todoId });
-    oldTodo.title = req.body.title;
-    oldTodo.date = req.body.date;
-    oldTodo.severity = req.body.severity;
-    oldTodo.propertyId = req.body.propertyId;
+    if (req.body.completed !== undefined && req.body.completed !== oldTodo.completed) {
+      oldTodo.completed = req.body.completed;
+    } else {
+      oldTodo.title = req.body.title;
+      oldTodo.date = req.body.date;
+      oldTodo.severity = req.body.severity;
+      oldTodo.propertyId = req.body.propertyId;
+    }
     const updatedTodo = await oldTodo.save();
     responseService.successCreate(res, { todo: updatedTodo });
   }
