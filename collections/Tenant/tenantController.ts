@@ -1,13 +1,10 @@
 import { IRequest, IResponse } from '../../config/interfaces/IMiddlewareParams';
-import databaseService from '../../services/database/databaseService';
 import { ITenant } from './interfaces/ITenant';
 import responseService from '../../services/responseService';
-import Property from '../Property/propertyModel';
 import Tenant from './tenantModel';
 import DatabaseService from '../../services/database/databaseService';
 
 const _tenantDataService: DatabaseService = new DatabaseService(Tenant);
-const _propertyDataService: DatabaseService = new DatabaseService(Property);
 
 export class TenantController {
   contructor() {}
@@ -31,11 +28,13 @@ export class TenantController {
 
   public async createTenant(req: IRequest, res: IResponse): Promise<void> {
     const tenant: ITenant = await _tenantDataService.create(req.user._id, req.body);
+
     responseService.successCreate(res, { tenant: tenant });
   }
 
   public async deleteTenant(req: IRequest, res: IResponse): Promise<void> {
-    await _tenantDataService.delete(req.user._id, { id: req.params.tenantId });
+    await _tenantDataService.deleteOne(req.user._id, { _id: req.params.tenantId });
+
     responseService.successDelete(res);
   }
 

@@ -9,6 +9,7 @@ export abstract class AbstractDatabaseService {
 
   public findOne(userId: string, params: FetchQuery): DocumentQuery<any[], any, {}> {
     params = this._setUser(params, userId);
+    console.log(params);
     return this._model.findOne(params);
   }
 
@@ -22,11 +23,12 @@ export abstract class AbstractDatabaseService {
     return this._model.create(data);
   }
 
-  public delete(
+  public deleteOne(
     userId: string,
     query: FetchQuery
   ): Query<{ ok?: number; n?: number } & { deletedCount?: number }> {
     query = this._setUser(query, userId);
+    console.log(query);
     return this._model.deleteOne(query);
   }
 

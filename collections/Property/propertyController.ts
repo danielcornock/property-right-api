@@ -45,7 +45,7 @@ export default class PropertyController {
   }
 
   public async deleteProperty(req: IRequest, res: IResponse): Promise<void> {
-    await _propertyDataService.delete(req.user._id, {
+    await _propertyDataService.deleteOne(req.user._id, {
       _id: req.params.propertyId
     });
 

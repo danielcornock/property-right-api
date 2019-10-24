@@ -1,8 +1,9 @@
 import { IRequest, IResponse } from '../../config/interfaces/IMiddlewareParams';
 import databaseService from '../../services/database/databaseService';
-import Todo from './todoModel';
+import Todo, { ITodo } from './todoModel';
 import responseService from '../../services/responseService';
 import DatabaseService from '../../services/database/databaseService';
+import todoService from './todoService';
 
 const _todoDataService: DatabaseService = new DatabaseService(Todo);
 
@@ -31,21 +32,14 @@ export class TodoController {
   }
 
   public async updateTodo(req: IRequest, res: IResponse): Promise<void> {
-    const oldTodo: any = await _todoDataService.findOne(req.user._id, { _id: req.params.todoId });
-    if (req.body.completed !== undefined && req.body.completed !== oldTodo.completed) {
-      oldTodo.completed = req.body.completed;
-    } else {
-      oldTodo.title = req.body.title;
-      oldTodo.date = req.body.date;
-      oldTodo.severity = req.body.severity;
-      oldTodo.propertyId = req.body.propertyId;
-    }
-    const updatedTodo = await oldTodo.save();
-    responseService.successCreate(res, { todo: updatedTodo });
+    const oldTodo = await _todoDataService.findOne(req.user._id, { _id: req.params.todoId });
+    const updatedTodo = todoService.assignTodo(req.body, oldTodo);
+    const todoRes = await updatedTodo.save();
+    responseService.successCreate(res, { todo: todoRes });
   }
 
   public async deleteTodo(req: IRequest, res: IResponse): Promise<void> {
-    await _todoDataService.delete(req.user._id, { _id: req.params.todoId });
+    await _todoDataService.deleteOne(req.user._id, { _id: req.params.todoId });
     responseService.successDelete(res);
   }
 
