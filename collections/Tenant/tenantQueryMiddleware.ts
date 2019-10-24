@@ -4,13 +4,12 @@ import Property from '../Property/propertyModel';
 import { INext } from '../../config/interfaces/IMiddlewareParams';
 import DatabaseService from '../../services/database/databaseService';
 
+const _propertyDataService: DatabaseService = new DatabaseService(Property);
+
 export class TenantQueryMiddleware {
   private readonly _tenantSchema: Schema;
-  private readonly _propertyDataService: DatabaseService;
-
   constructor(tenantSchema: Schema) {
     this._tenantSchema = tenantSchema;
-    this._propertyDataService = new DatabaseService(Property);
     this._setPropertyNameFromId();
     this._setAvatarDetails();
   }
@@ -18,7 +17,7 @@ export class TenantQueryMiddleware {
   private _setPropertyNameFromId() {
     this._tenantSchema.pre('save', async function setPropertyName(this: any, next: INext) {
       if (this.propertyId) {
-        this.propertyName = await this._propertyDataService.findOne('', { propertyId: this.propertyId });
+        this.propertyName = await _propertyDataService.findOne('', { propertyId: this.propertyId });
       }
 
       next();

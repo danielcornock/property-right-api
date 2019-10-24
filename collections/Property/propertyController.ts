@@ -15,26 +15,12 @@ export default class PropertyController {
 
   public async getAllProperties(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      // const properties = await _propertyDataService
-      //   .findMany(req.user._id)
-      //   .populate('todoCount')
-      //   .exec();
       const properties = await _propertyDataService
         .findMany(req.user._id)
         .populate('todoCount')
+        .populate('tenants')
         .exec();
-      // const todos = await _todoDataService.aggregate([
-      //   {
-      //     $match: { propertyName: { $exists: true }, completed: { $ne: true } }
-      //   },
-      //   {
-      //     $group: {
-      //       _id: '$propertyId',
-      //       count: { $sum: 1 }
-      //     }
-      //   }
-      // ]);
-      // const fusedData = propertyService.combinePropertiesAndTodos(properties, todos);
+
       resService.successFind(res, { properties: properties });
     } catch (e) {
       return next(new Error('Cannot fetch properties'));
@@ -54,9 +40,7 @@ export default class PropertyController {
 
   public async createProperty(req: IRequest, res: IResponse): Promise<void> {
     req.body.image = await fileService.setImagePath(req);
-    console.log(req.body);
     const property = await _propertyDataService.create(req.user._id, req.body);
-    console.log(property);
     resService.successCreate(res, { property: property });
   }
 

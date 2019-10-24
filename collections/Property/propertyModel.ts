@@ -13,13 +13,7 @@ const propertySchema = new mongoose.Schema(
     },
     name: String,
     monthlyRent: Number,
-    image: String,
-    tenants: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Tenant'
-      }
-    ]
+    image: String
   },
   {
     toJSON: { virtuals: true },
@@ -32,6 +26,12 @@ propertySchema.virtual('todoCount', {
   foreignField: 'propertyId',
   localField: '_id',
   count: true
+});
+
+propertySchema.virtual('tenants', {
+  ref: 'Tenant',
+  foreignField: 'propertyId',
+  localField: '_id'
 });
 
 new PropertyMiddleware(propertySchema);
