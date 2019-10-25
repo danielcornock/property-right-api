@@ -1,8 +1,8 @@
-import todoRoutes from '../todo/todoRoutes';
 import PropertyController from '../../collections/Property/propertyController';
-import { GuardedRoutes } from '../abstract/guardedRoutes';
 import fileService from '../../services/fileService';
+import { GuardedRoutes } from '../abstract/guardedRoutes';
 import tenantRoutes from '../tenant/tenantRoutes';
+import todoRoutes from '../todo/todoRoutes';
 
 class PropertyRoutes extends GuardedRoutes {
   private controller: PropertyController;
@@ -15,15 +15,15 @@ class PropertyRoutes extends GuardedRoutes {
   }
 
   protected _assignRoutes() {
-    this.router.get('/', this.controller.getAllProperties);
+    this.router.get('/', (...args) => this.controller.getAllProperties(...args));
 
-    this.router.post('/', fileService.multer().single('image'), this.controller.createProperty);
+    this.router.post('/', fileService.multer().single('image'), (...args) => this.controller.createProperty(...args));
 
-    this.router.get('/:propertyId', this.controller.getProperty);
+    this.router.get('/:propertyId', (...args) => this.controller.getProperty(...args));
 
-    this.router.delete('/:propertyId', this.controller.deleteProperty);
+    this.router.delete('/:propertyId', (...args) => this.controller.deleteProperty(...args));
 
-    this.router.put('/:propertyId', fileService.multer().single('image'), this.controller.updateProperty);
+    this.router.put('/:propertyId', fileService.multer().single('image'), (...args) => this.controller.updateProperty(...args));
   }
 
   private _useExternalRoutes(): void {

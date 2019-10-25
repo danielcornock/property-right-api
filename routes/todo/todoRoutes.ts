@@ -10,15 +10,15 @@ export class TodoRoutes extends GuardedRoutes {
   }
 
   protected _assignRoutes(): void {
-    this.router.get('/', this.controller.getAllTodos);
+    this.router.get('/',(...args) => this.controller.getAllTodos(...args));
 
-    this.router.post('/', this.controller.createTodo);
+    this.router.post('/', (...args) =>this.controller.createTodo(...args));
 
-    this.router.get('/:todoId', this.controller.getTodo);
+    this.router.get('/:todoId',(...args) => this.controller.getTodo(...args));
 
-    this.router.put('/:todoId', this.controller.updateTodo);
+    this.router.put('/:todoId',(...args) => this.controller.updateTodo(...args));
 
-    this.router.delete('/:todoId', this.controller.deleteTodo);
+    this.router.delete('/:todoId',(...args) => this.controller.deleteTodo(...args));
   }
 }
 

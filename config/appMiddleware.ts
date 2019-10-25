@@ -5,8 +5,8 @@ import morgan from 'morgan';
 import * as config from './config';
 
 export class Middleware {
-  constructor(private app: any) {
-    this.globalSetup(this.app);
+  constructor(app: express.Application) {
+    this.globalSetup(app);
   }
 
   public globalSetup(app: any): void {

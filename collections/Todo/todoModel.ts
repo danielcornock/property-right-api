@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema, models, model } from 'mongoose';
-import validator from 'validator';
 import { TodoQueryMiddleware } from './todoQueryMiddleware';
 
 export interface ITodo extends Document {
