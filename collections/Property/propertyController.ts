@@ -5,17 +5,19 @@ import Property from './propertyModel';
 import DatabaseService from '../../services/database/databaseService';
 import Todo from '../Todo/todoModel';
 import { Error } from 'mongoose';
-import propertyService from './propertyService';
-
-const _propertyDataService: DatabaseService = new DatabaseService(Property);
-const _todoDataService: DatabaseService = new DatabaseService(Todo);
 
 export default class PropertyController {
-  constructor() {}
+  private _propertyDataService: DatabaseService;
+  private _todoDataService: DatabaseService;
+
+  constructor() {
+    this._propertyDataService = new DatabaseService(Property);
+    this._todoDataService = new DatabaseService(Todo);
+  }
 
   public async getAllProperties(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const properties = await _propertyDataService
+      const properties = await this._propertyDataService
         .findMany(req.user._id)
         .populate('todoCount')
         .populate('tenants')
@@ -28,8 +30,9 @@ export default class PropertyController {
   }
 
   public async getProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
+    console.log(this);
     try {
-      const property = await _propertyDataService.findOne(req.user._id, {
+      const property = await this._propertyDataService.findOne(req.user._id, {
         _id: req.params.propertyId
       });
       resService.successFind(res, { property: property });
@@ -38,28 +41,36 @@ export default class PropertyController {
     }
   }
 
-  public async createProperty(req: IRequest, res: IResponse): Promise<void> {
-    req.body.image = await fileService.setImagePath(req);
-    const property = await _propertyDataService.create(req.user._id, req.body);
-    resService.successCreate(res, { property: property });
+  public async createProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
+    try {
+      req.body.image = await fileService.setImagePath(req);
+      const property = await this._propertyDataService.create(req.user._id, req.body);
+      resService.successCreate(res, { property: property });
+    } catch (e) {
+      return next(new Error('Cannot create property.'));
+    }
   }
 
-  public async deleteProperty(req: IRequest, res: IResponse): Promise<void> {
-    await _propertyDataService.deleteOne(req.user._id, {
+  public async deleteProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
+    await this._propertyDataService.deleteOne(req.user._id, {
       _id: req.params.propertyId
     });
 
-    await _todoDataService.deleteMany(req.user._id, {
+    await this._todoDataService.deleteMany(req.user._id, {
       propertyId: req.params.propertyId
     });
 
     resService.successDelete(res);
   }
 
-  public async updateProperty(req: IRequest, res: IResponse): Promise<void> {
+  public async updateProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
     if (req.file) req.body.image = await fileService.setImagePath(req);
 
-    const updatedProperty = await _propertyDataService.update(req.user._id, req.params.propertyId, req.body);
+    const updatedProperty = await this._propertyDataService.update(
+      req.user._id,
+      req.params.propertyId,
+      req.body
+    );
 
     resService.successCreate(res, { property: updatedProperty });
   }

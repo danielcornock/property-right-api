@@ -8,17 +8,19 @@ import * as config from '../../config/config';
 import User from './userModel';
 import DatabaseService from '../../services/database/databaseService';
 
-const _userDataService: UserDatabaseService = new UserDatabaseService(User);
-
 class AuthService {
-  constructor() {}
+  private _userDataService: UserDatabaseService;
+
+  constructor() {
+    this._userDataService = new UserDatabaseService(User);
+  }
 
   public async createUser(user: any): Promise<any> {
-    return await _userDataService.create(user);
+    return await this._userDataService.create(user);
   }
 
   public async login(email: string) {
-    return await _userDataService.findOne({ email });
+    return await this._userDataService.findOne({ email });
   }
 
   public createSendToken(user: IUser, res: IResponse): void {

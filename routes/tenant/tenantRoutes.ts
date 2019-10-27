@@ -11,15 +11,15 @@ class TenantRoutes extends GuardedRoutes {
   }
 
   protected _assignRoutes(): void {
-    this.router.get('/', this.controller.getAllTenants);
+    this.router.get('/', (...args) => this.controller.getAllTenants(...args));
 
-    this.router.post('/', this.controller.createTenant);
+    this.router.post('/', (...args) => this.controller.createTenant(...args));
 
-    this.router.get('/:tenantId', this.controller.getTenant);
+    this.router.get('/:tenantId', (...args) => this.controller.getTenant(...args));
 
-    this.router.put('/:tenantId', this.controller.updateTenant);
+    this.router.put('/:tenantId', (...args) => this.controller.updateTenant(...args));
 
-    this.router.delete('/:tenantId', this.controller.deleteTenant);
+    this.router.delete('/:tenantId', (...args) => this.controller.deleteTenant(...args));
   }
 }
 

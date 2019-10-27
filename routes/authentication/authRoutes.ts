@@ -11,8 +11,8 @@ export class AuthRoutes extends BaseRoutes {
   }
 
   protected _assignRoutes(): void {
-    this.router.post('/signup', this._authController.signup);
-    this.router.post('/login', this._authController.login);
+    this.router.post('/signup', (...args) => this._authController.signup(...args));
+    this.router.post('/login', (...args) => this._authController.login(...args));
   }
 }
 

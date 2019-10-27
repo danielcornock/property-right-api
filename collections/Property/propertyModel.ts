@@ -21,6 +21,8 @@ const propertySchema = new mongoose.Schema(
   }
 );
 
+new PropertyMiddleware(propertySchema);
+
 propertySchema.virtual('todoCount', {
   ref: 'Todo',
   foreignField: 'propertyId',
@@ -34,6 +36,5 @@ propertySchema.virtual('tenants', {
   localField: '_id'
 });
 
-new PropertyMiddleware(propertySchema);
 
 export default models.Property || model('Property', propertySchema);
