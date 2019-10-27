@@ -7,7 +7,7 @@ import DatabaseService from '../../services/database/databaseService';
 export class TenantController {
   private _tenantDataService: DatabaseService;
 
-  contructor() {
+  constructor() {
     this._tenantDataService = new DatabaseService(Tenant);
   }
 
