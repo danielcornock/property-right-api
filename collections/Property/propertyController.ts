@@ -7,8 +7,8 @@ import Todo from '../Todo/todoModel';
 import { Error } from 'mongoose';
 
 export default class PropertyController {
-  private readonly _propertyDataService: DatabaseService;
-  private readonly _todoDataService: DatabaseService;
+  private _propertyDataService: DatabaseService;
+  private _todoDataService: DatabaseService;
 
   constructor() {
     this._propertyDataService = new DatabaseService(Property);
@@ -47,7 +47,7 @@ export default class PropertyController {
       const property = await this._propertyDataService.create(req.user._id, req.body);
       resService.successCreate(res, { property: property });
     } catch (e) {
-      return next (new Error('Cannot create property.'));
+      return next(new Error('Cannot create property.'));
     }
   }
 
@@ -66,7 +66,11 @@ export default class PropertyController {
   public async updateProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
     if (req.file) req.body.image = await fileService.setImagePath(req);
 
-    const updatedProperty = await this._propertyDataService.update(req.user._id, req.params.propertyId, req.body);
+    const updatedProperty = await this._propertyDataService.update(
+      req.user._id,
+      req.params.propertyId,
+      req.body
+    );
 
     resService.successCreate(res, { property: updatedProperty });
   }

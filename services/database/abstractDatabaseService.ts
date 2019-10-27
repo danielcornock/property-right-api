@@ -9,7 +9,6 @@ export abstract class AbstractDatabaseService {
 
   public findOne(userId: string, params: FetchQuery): DocumentQuery<any[], any, {}> {
     params = this._setUser(params, userId);
-    console.log(params);
     return this._model.findOne(params);
   }
 
@@ -28,7 +27,6 @@ export abstract class AbstractDatabaseService {
     query: FetchQuery
   ): Query<{ ok?: number; n?: number } & { deletedCount?: number }> {
     query = this._setUser(query, userId);
-    console.log(query);
     return this._model.deleteOne(query);
   }
 
@@ -45,14 +43,14 @@ export abstract class AbstractDatabaseService {
       _id: docId,
       user: userId
     };
-    return this._model.findByIdAndUpdate(query, data);
+    return this._model.findOneAndUpdate(query, data);
   }
 
   public aggregate(aggregation: Array<any>): Aggregate<any[]> {
     return this._model.aggregate(aggregation);
   }
 
-  protected _setUser(params: any, userId: string): FetchQuery {
+  private _setUser(params: any, userId: string): FetchQuery {
     if (userId) {
       params.user = userId;
     }

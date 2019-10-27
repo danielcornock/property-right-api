@@ -6,7 +6,8 @@ import DatabaseService from '../../services/database/databaseService';
 import todoService from './todoService';
 
 export class TodoController {
-  private readonly _todoDataService: DatabaseService;
+  private _todoDataService: DatabaseService;
+
   constructor() {
     this._todoDataService = new DatabaseService(Todo);
   }

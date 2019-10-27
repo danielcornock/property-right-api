@@ -17,7 +17,6 @@ export class TodoQueryMiddleware {
       if (this.propertyId) {
         const property: any = await _propertyDataService.findOne('', { _id: this.propertyId });
         this.propertyName = property.name;
-        console.log(property.name);
       }
 
       next();

@@ -17,13 +17,17 @@ class PropertyRoutes extends GuardedRoutes {
   protected _assignRoutes() {
     this.router.get('/', (...args) => this.controller.getAllProperties(...args));
 
-    this.router.post('/', fileService.multer().single('image'), (...args) => this.controller.createProperty(...args));
+    this.router.post('/', fileService.multer().single('image'), (...args) =>
+      this.controller.createProperty(...args)
+    );
 
     this.router.get('/:propertyId', (...args) => this.controller.getProperty(...args));
 
     this.router.delete('/:propertyId', (...args) => this.controller.deleteProperty(...args));
 
-    this.router.put('/:propertyId', fileService.multer().single('image'), (...args) => this.controller.updateProperty(...args));
+    this.router.put('/:propertyId', fileService.multer().single('image'), (...args) =>
+      this.controller.updateProperty(...args)
+    );
   }
 
   private _useExternalRoutes(): void {
