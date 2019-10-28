@@ -1,5 +1,5 @@
 import mongoose, { Schema, model, Model, Document, models, Mongoose } from 'mongoose';
-import { PropertyMiddleware } from './propertyMiddleware';
+import { PropertyQueryMiddleware } from './propertyQueryMiddleware';
 
 //*---------------------------------------------
 //* Model Definition
@@ -12,6 +12,9 @@ const propertySchema = new mongoose.Schema(
       required: [true, 'You must be logged in to post a property.']
     },
     name: String,
+    town: String,
+    country: String,
+    url: String,
     monthlyRent: Number,
     image: String
   },
@@ -21,7 +24,7 @@ const propertySchema = new mongoose.Schema(
   }
 );
 
-new PropertyMiddleware(propertySchema);
+new PropertyQueryMiddleware(propertySchema);
 
 propertySchema.virtual('todoCount', {
   ref: 'Todo',
@@ -35,6 +38,5 @@ propertySchema.virtual('tenants', {
   foreignField: 'propertyId',
   localField: '_id'
 });
-
 
 export default models.Property || model('Property', propertySchema);
