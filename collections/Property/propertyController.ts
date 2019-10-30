@@ -4,15 +4,18 @@ import fileService from './../../services/fileService';
 import Property from './propertyModel';
 import DatabaseService from '../../services/database/databaseService';
 import Todo from '../Todo/todoModel';
+import Tenant from '../Tenant/tenantModel';
 import { Error } from 'mongoose';
 
 export default class PropertyController {
   private _propertyDataService: DatabaseService;
   private _todoDataService: DatabaseService;
+  private _tenantDataService: DatabaseService;
 
   constructor() {
     this._propertyDataService = new DatabaseService(Property);
     this._todoDataService = new DatabaseService(Todo);
+    this._tenantDataService = new DatabaseService(Tenant);
   }
 
   public async getAllProperties(req: IRequest, res: IResponse, next: INext): Promise<void> {
@@ -57,6 +60,10 @@ export default class PropertyController {
     });
 
     await this._todoDataService.deleteMany(req.user._id, {
+      propertyId: req.params.propertyId
+    });
+
+    await this._tenantDataService.deleteMany(req.user._id, {
       propertyId: req.params.propertyId
     });
 
