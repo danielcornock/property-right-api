@@ -27,7 +27,7 @@ export default class PropertyController {
         .exec();
 
       resService.successFind(res, { properties: properties });
-    } catch (e) {
+    } catch {
       return next(new Error('Cannot fetch properties'));
     }
   }
@@ -39,7 +39,7 @@ export default class PropertyController {
         _id: req.params.propertyId
       });
       resService.successFind(res, { property: property });
-    } catch (e) {
+    } catch {
       return next(new Error('Cannot fetch property'));
     }
   }
@@ -49,36 +49,44 @@ export default class PropertyController {
       req.body.image = await fileService.setImagePath(req);
       const property = await this._propertyDataService.create(req.user._id, req.body);
       resService.successCreate(res, { property: property });
-    } catch (e) {
+    } catch {
       return next(new Error('Cannot create property.'));
     }
   }
 
   public async deleteProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    await this._propertyDataService.deleteOne(req.user._id, {
-      _id: req.params.propertyId
-    });
+    try {
+      await this._propertyDataService.deleteOne(req.user._id, {
+        _id: req.params.propertyId
+      });
 
-    await this._todoDataService.deleteMany(req.user._id, {
-      propertyId: req.params.propertyId
-    });
+      await this._todoDataService.deleteMany(req.user._id, {
+        propertyId: req.params.propertyId
+      });
 
-    await this._tenantDataService.deleteMany(req.user._id, {
-      propertyId: req.params.propertyId
-    });
+      await this._tenantDataService.deleteMany(req.user._id, {
+        propertyId: req.params.propertyId
+      });
 
-    resService.successDelete(res);
+      resService.successDelete(res);
+    } catch {
+      return next(new Error('Unable to delete property.'));
+    }
   }
 
   public async updateProperty(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    if (req.file) req.body.image = await fileService.setImagePath(req);
+    try {
+      if (req.file) req.body.image = await fileService.setImagePath(req);
 
-    const updatedProperty = await this._propertyDataService.update(
-      req.user._id,
-      req.params.propertyId,
-      req.body
-    );
+      const updatedProperty = await this._propertyDataService.update(
+        req.user._id,
+        req.params.propertyId,
+        req.body
+      );
 
-    resService.successCreate(res, { property: updatedProperty });
+      resService.successCreate(res, { property: updatedProperty });
+    } catch {
+      return next(new Error('Unable to update property.'));
+    }
   }
 }

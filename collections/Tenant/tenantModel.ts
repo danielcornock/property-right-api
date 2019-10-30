@@ -13,7 +13,8 @@ const tenantSchema = new Schema(
     },
     propertyId: {
       type: Schema.Types.ObjectId,
-      ref: 'Property'
+      ref: 'Property',
+      required: [true, 'You must add a tenant to a property']
     },
     propertyName: String,
     name: String,

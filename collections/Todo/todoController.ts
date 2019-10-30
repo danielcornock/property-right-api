@@ -13,35 +13,55 @@ export class TodoController {
   }
 
   public async getAllTodos(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    let query: any = {};
-    if (req.params.propertyId) {
-      query.propertyId = req.params.propertyId;
+    try {
+      let query: any = {};
+      if (req.params.propertyId) {
+        query.propertyId = req.params.propertyId;
+      }
+
+      const todos = await this._todoDataService.findMany(req.user._id, query);
+
+      responseService.successFind(res, { todos: todos });
+    } catch {
+      return next(new Error('Unable to fetch todos.'));
     }
-
-    const todos = await this._todoDataService.findMany(req.user._id, query);
-
-    responseService.successFind(res, { todos: todos });
   }
 
   public async createTodo(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    const todo = await this._todoDataService.create(req.user._id, req.body);
-    responseService.successCreate(res, { todo: todo });
+    try {
+      const todo = await this._todoDataService.create(req.user._id, req.body);
+      responseService.successCreate(res, { todo: todo });
+    } catch {
+      return next(new Error('Error creating todo.'));
+    }
   }
 
   public async getTodo(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    const todo = await this._todoDataService.findOne(req.user._id, { _id: req.params.todoId });
-    responseService.successFind(res, { todo: todo });
+    try {
+      const todo = await this._todoDataService.findOne(req.user._id, { _id: req.params.todoId });
+      responseService.successFind(res, { todo: todo });
+    } catch {
+      return next(new Error('Unable to fetch todo'));
+    }
   }
 
   public async updateTodo(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    const oldTodo = await this._todoDataService.findOne(req.user._id, { _id: req.params.todoId });
-    const updatedTodo = todoService.assignTodo(req.body, oldTodo);
-    const todoRes = await updatedTodo.save();
-    responseService.successCreate(res, { todo: todoRes });
+    try {
+      const oldTodo = await this._todoDataService.findOne(req.user._id, { _id: req.params.todoId });
+      const updatedTodo = todoService.assignTodo(req.body, oldTodo);
+      const todoRes = await updatedTodo.save();
+      responseService.successCreate(res, { todo: todoRes });
+    } catch {
+      return next(new Error('Unable to update todo'));
+    }
   }
 
   public async deleteTodo(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    await this._todoDataService.deleteOne(req.user._id, { _id: req.params.todoId });
-    responseService.successDelete(res);
+    try {
+      await this._todoDataService.deleteOne(req.user._id, { _id: req.params.todoId });
+      responseService.successDelete(res);
+    } catch {
+      return next(new Error('Unable to delete todo.'));
+    }
   }
 }

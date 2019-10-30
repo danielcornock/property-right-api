@@ -12,37 +12,56 @@ export class TenantController {
   }
 
   public async getAllTenants(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    let query: any = {};
-    if (req.params.propertyId) {
-      query.propertyId = req.params.propertyId;
+    try {
+      let query: any = {};
+      if (req.params.propertyId) {
+        query.propertyId = req.params.propertyId;
+      }
+
+      const tenants: Array<ITenant> = await this._tenantDataService.findMany(req.user._id, query);
+
+      responseService.successFind(res, { tenants: tenants });
+    } catch {
+      return next(new Error('Unable to fetch tenants.'));
     }
-
-    const tenants: Array<ITenant> = await this._tenantDataService.findMany(req.user._id, query);
-
-    responseService.successFind(res, { tenants: tenants });
   }
 
   public async getTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    const tenant = await this._tenantDataService.findOne(req.user._id, { _id: req.params.tenantId });
+    try {
+      const tenant = await this._tenantDataService.findOne(req.user._id, { _id: req.params.tenantId });
 
-    responseService.successFind(res, { tenant: tenant });
+      responseService.successFind(res, { tenant: tenant });
+    } catch {
+      return next(new Error('Unable to fetch tenant.'));
+    }
   }
 
   public async createTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    const tenant: ITenant = await this._tenantDataService.create(req.user._id, req.body);
-
-    responseService.successCreate(res, { tenant: tenant });
+    try {
+      const tenant: ITenant = await this._tenantDataService.create(req.user._id, req.body);
+      responseService.successCreate(res, { tenant: tenant });
+    } catch {
+      return next(new Error('Error creating tenant.'));
+    }
   }
 
   public async deleteTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    await this._tenantDataService.deleteOne(req.user._id, { _id: req.params.tenantId });
+    try {
+      await this._tenantDataService.deleteOne(req.user._id, { _id: req.params.tenantId });
 
-    responseService.successDelete(res);
+      responseService.successDelete(res);
+    } catch {
+      return next(new Error('Unable to delete tenant'));
+    }
   }
 
   public async updateTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
-    const tenant: any = await this._tenantDataService.update(req.user._id, req.params.tenantId, req.body);
+    try {
+      const tenant: any = await this._tenantDataService.update(req.user._id, req.params.tenantId, req.body);
 
-    responseService.successCreate(res, { tenant: tenant });
+      responseService.successCreate(res, { tenant: tenant });
+    } catch {
+      return next(new Error('Unable to update tenant'));
+    }
   }
 }
