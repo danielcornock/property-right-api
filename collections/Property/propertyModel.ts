@@ -28,14 +28,14 @@ new PropertyQueryMiddleware(propertySchema);
 
 propertySchema.virtual('todoCount', {
   ref: 'Todo',
-  foreignField: 'propertyId',
+  foreignField: 'property',
   localField: '_id',
   count: true
 });
 
 propertySchema.virtual('tenants', {
   ref: 'Tenant',
-  foreignField: 'propertyId',
+  foreignField: 'property',
   localField: '_id'
 });
 

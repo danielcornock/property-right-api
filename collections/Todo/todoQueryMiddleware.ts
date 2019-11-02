@@ -9,7 +9,7 @@ export class TodoQueryMiddleware {
 
   constructor(todoSchema: Schema) {
     this._todoSchema = todoSchema;
-    this._fetchPropertyName();
+    // this._fetchPropertyName();
   }
 
   private async _fetchPropertyName() {

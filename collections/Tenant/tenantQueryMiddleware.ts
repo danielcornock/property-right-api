@@ -10,14 +10,14 @@ export class TenantQueryMiddleware {
   private readonly _tenantSchema: Schema;
   constructor(tenantSchema: Schema) {
     this._tenantSchema = tenantSchema;
-    this._setPropertyNameFromId();
+    // this._setPropertyNameFromId();
     this._setAvatarDetails();
   }
 
   private _setPropertyNameFromId() {
     this._tenantSchema.pre('save', async function setPropertyName(this: any, next: INext) {
       if (this.propertyId) {
-        this.propertyName = await _propertyDataService.findOne('', { propertyId: this.propertyId });
+        this.propertyName = await _propertyDataService.findOne('', { property: this.property });
       }
 
       next();

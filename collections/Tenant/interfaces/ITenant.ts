@@ -6,7 +6,7 @@ export interface ITenant extends Document {
   name: string;
   email: string;
   phone: string;
-  propertyId: string;
+  property: string;
   propertyName: string;
   user: string;
   avatar: IAvatar;

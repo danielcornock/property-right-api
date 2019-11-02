@@ -8,7 +8,7 @@ class TodoService {
       oldTodo.title = todo.title;
       oldTodo.date = todo.date;
       oldTodo.severity = todo.severity;
-      oldTodo.propertyId = todo.propertyId;
+      oldTodo.property = todo.property;
     }
 
     return oldTodo;

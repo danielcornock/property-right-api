@@ -16,7 +16,7 @@ export class TodoController {
     try {
       let query: any = {};
       if (req.params.propertyId) {
-        query.propertyId = req.params.propertyId;
+        query.property = req.params.propertyId;
       }
 
       const todos = await this._todoDataService.findMany(req.user._id, query);

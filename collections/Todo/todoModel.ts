@@ -3,8 +3,7 @@ import { TodoQueryMiddleware } from './todoQueryMiddleware';
 
 export interface ITodo extends Document {
   user: Schema.Types.ObjectId | string;
-  propertyId: string;
-  propertyName: string;
+  property: string;
   title: string;
   date: string;
   severity: string;
@@ -18,11 +17,10 @@ const todoSchema = new mongoose.Schema(
       ref: 'User',
       required: [true, 'You must be logged in to create a todo!']
     },
-    propertyId: {
+    property: {
       type: Schema.Types.ObjectId,
       ref: 'Property'
     },
-    propertyName: String,
     title: String,
     date: Date,
     severity: {
@@ -43,6 +41,15 @@ const todoSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
+
+todoSchema.pre('find' as any, function(this: any, next) {
+  this.populate({
+    path: 'property',
+    select: 'name'
+  });
+
+  next();
+});
 
 new TodoQueryMiddleware(todoSchema);
 

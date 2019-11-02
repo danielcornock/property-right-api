@@ -61,11 +61,11 @@ export default class PropertyController {
       });
 
       await this._todoDataService.deleteMany(req.user._id, {
-        propertyId: req.params.propertyId
+        property: req.params.propertyId
       });
 
       await this._tenantDataService.deleteMany(req.user._id, {
-        propertyId: req.params.propertyId
+        property: req.params.propertyId
       });
 
       resService.successDelete(res);
