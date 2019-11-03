@@ -15,7 +15,7 @@ export class TenantController {
     try {
       let query: any = {};
       if (req.params.propertyId) {
-        query.propertyId = req.params.propertyId;
+        query.property = req.params.propertyId;
       }
 
       const tenants: Array<ITenant> = await this._tenantDataService
