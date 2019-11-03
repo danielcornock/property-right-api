@@ -54,15 +54,6 @@ tenantSchema.virtual('avatar.initials').get(function getInitials(this: any) {
   ).toUpperCase();
 });
 
-tenantSchema.pre('find' as any, function(this: any, next) {
-  this.populate({
-    path: 'property',
-    select: 'name'
-  });
-
-  next();
-});
-
 new TenantQueryMiddleware(tenantSchema);
 
 export default models.Tenant || model('Tenant', tenantSchema);

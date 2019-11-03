@@ -19,7 +19,9 @@ export class TodoController {
         query.property = req.params.propertyId;
       }
 
-      const todos = await this._todoDataService.findMany(req.user._id, query);
+      const todos = await this._todoDataService
+        .findMany(req.user._id, query)
+        .populate({ path: 'property', select: 'name' });
 
       responseService.successFind(res, { todos: todos });
     } catch {
@@ -38,7 +40,10 @@ export class TodoController {
 
   public async getTodo(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const todo = await this._todoDataService.findOne(req.user._id, { _id: req.params.todoId });
+      const todo = await this._todoDataService
+        .findOne(req.user._id, { _id: req.params.todoId })
+        .populate({ path: 'property', select: 'name' });
+
       responseService.successFind(res, { todo: todo });
     } catch {
       return next(new Error('Unable to fetch todo'));

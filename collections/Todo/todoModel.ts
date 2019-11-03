@@ -42,15 +42,6 @@ const todoSchema = new mongoose.Schema(
   }
 );
 
-todoSchema.pre('find' as any, function(this: any, next) {
-  this.populate({
-    path: 'property',
-    select: 'name'
-  });
-
-  next();
-});
-
 new TodoQueryMiddleware(todoSchema);
 
 export default models.Todo || model('Todo', todoSchema, 'Todo');

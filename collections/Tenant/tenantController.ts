@@ -18,7 +18,9 @@ export class TenantController {
         query.propertyId = req.params.propertyId;
       }
 
-      const tenants: Array<ITenant> = await this._tenantDataService.findMany(req.user._id, query);
+      const tenants: Array<ITenant> = await this._tenantDataService
+        .findMany(req.user._id, query)
+        .populate({ path: 'property', select: 'name' });
 
       responseService.successFind(res, { tenants: tenants });
     } catch {
@@ -28,7 +30,9 @@ export class TenantController {
 
   public async getTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const tenant = await this._tenantDataService.findOne(req.user._id, { _id: req.params.tenantId });
+      const tenant = await this._tenantDataService
+        .findOne(req.user._id, { _id: req.params.tenantId })
+        .populate({ path: 'property', select: 'name' });
 
       responseService.successFind(res, { tenant: tenant });
     } catch {
