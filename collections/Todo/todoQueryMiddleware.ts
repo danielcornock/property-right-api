@@ -14,9 +14,8 @@ export class TodoQueryMiddleware {
 
   private async _fetchPropertyName() {
     this._todoSchema.pre('save', async function(this: any, next: INext) {
-      if (this.propertyId) {
-        const property: any = await _propertyDataService.findOne('', { _id: this.propertyId });
-        this.propertyName = property.name;
+      if (this.property) {
+        this.populate('property');
       }
 
       next();

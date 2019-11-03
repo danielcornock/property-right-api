@@ -40,8 +40,8 @@ export class TenantController {
     try {
       const tenant: ITenant = await this._tenantDataService.create(req.user._id, req.body);
       responseService.successCreate(res, { tenant: tenant });
-    } catch {
-      return next(new Error('Error creating tenant.'));
+    } catch (e) {
+      return next(e);
     }
   }
 
@@ -57,7 +57,11 @@ export class TenantController {
 
   public async updateTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const tenant: any = await this._tenantDataService.update(req.user._id, req.params.tenantId, req.body);
+      const tenant: any = await this._tenantDataService.update(
+        req.user._id,
+        { _id: req.params.tenantId },
+        req.body
+      );
 
       responseService.successCreate(res, { tenant: tenant });
     } catch {

@@ -30,6 +30,7 @@ propertySchema.virtual('todoCount', {
   ref: 'Todo',
   foreignField: 'property',
   localField: '_id',
+  options: { match: { completed: { $ne: true } } },
   count: true
 });
 

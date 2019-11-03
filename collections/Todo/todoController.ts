@@ -47,10 +47,12 @@ export class TodoController {
 
   public async updateTodo(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const oldTodo = await this._todoDataService.findOne(req.user._id, { _id: req.params.todoId });
-      const updatedTodo = todoService.assignTodo(req.body, oldTodo);
-      const todoRes = await updatedTodo.save();
-      responseService.successCreate(res, { todo: todoRes });
+      const updatedTodo = await this._todoDataService.update(
+        req.user._id,
+        { _id: req.params.todoId },
+        req.body
+      );
+      responseService.successCreate(res, { todo: updatedTodo });
     } catch {
       return next(new Error('Unable to update todo'));
     }

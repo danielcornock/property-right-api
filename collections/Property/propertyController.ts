@@ -22,7 +22,7 @@ export default class PropertyController {
     try {
       const properties = await this._propertyDataService
         .findMany(req.user._id)
-        .populate({ path: 'todoCount', match: { completed: { $ne: true } } })
+        .populate({ path: 'todoCount' })
         .populate('tenants')
         .exec();
 
@@ -80,7 +80,7 @@ export default class PropertyController {
 
       const updatedProperty = await this._propertyDataService.update(
         req.user._id,
-        req.params.propertyId,
+        { _id: req.params.propertyId },
         req.body
       );
 

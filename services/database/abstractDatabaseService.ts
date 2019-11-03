@@ -38,12 +38,18 @@ export abstract class AbstractDatabaseService {
     return this._model.deleteMany(query);
   }
 
-  public update(userId: string, docId: string, data: any): DocumentQuery<any[], any, {}> {
+  public updateDeprecated(userId: string, docId: string, data: any): DocumentQuery<any[], any, {}> {
     const query = {
       _id: docId,
       user: userId
     };
     return this._model.findOneAndUpdate(query, data);
+  }
+
+  public async update(userId: string, query: FetchQuery, data: any) {
+    const oldDocument = await this.findOne(userId, query);
+    const updatedDocument = Object.assign(oldDocument, data);
+    return updatedDocument.save();
   }
 
   public aggregate(aggregation: Array<any>): Aggregate<any[]> {
