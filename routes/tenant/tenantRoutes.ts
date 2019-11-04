@@ -25,7 +25,7 @@ class TenantRoutes extends GuardedRoutes {
   }
 
   private _useExtenalRoutes() {
-    this.router.use('/:propertyId/payments', paymentRoutes);
+    this.router.use('/:tenantId/payments', paymentRoutes);
   }
 }
 

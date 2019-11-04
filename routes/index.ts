@@ -2,6 +2,7 @@ import propertyRoutes from './property/propertyRoutes';
 import todoRoutes from './todo/todoRoutes';
 import authRoutes from './authentication/authRoutes';
 import tenantRoutes from './tenant/tenantRoutes';
+import paymentRoutes from './payment/paymentRoutes';
 
 export class Routes {
   constructor(private app: any) {
@@ -13,5 +14,6 @@ export class Routes {
     app.use('/api/v1/properties', propertyRoutes);
     app.use('/api/v1/todos', todoRoutes);
     app.use('/api/v1/tenants', tenantRoutes);
+    app.use('/api/v1/payments', paymentRoutes);
   }
 }

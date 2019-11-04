@@ -12,6 +12,7 @@ export default class PaymentController {
 
   public async getAllPayments(req: IRequest, res: IResponse, next: INext) {
     try {
+      console.log(req.params);
       let query: any = {};
       if (req.params.propertyId) {
         query.property = req.params.propertyId;
@@ -28,6 +29,7 @@ export default class PaymentController {
   }
 
   public async createPayment(req: IRequest, res: IResponse, next: INext) {
+    console.log(req.body);
     try {
       const payment = await this._paymentDataService.create(req.user._id, req.body);
       resService.successCreate(res, { payment: payment });

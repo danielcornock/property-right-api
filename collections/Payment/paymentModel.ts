@@ -1,4 +1,5 @@
 import mongoose, { Schema, model, models } from 'mongoose';
+import { INext } from '../../config/interfaces/IMiddlewareParams';
 
 //*---------------------------------------------
 //* Model Definition
@@ -28,12 +29,13 @@ const paymentSchema = new mongoose.Schema(
       type: Date,
       required: [true, 'You must set a date that the payment is due']
     },
-    paidOn: {
-      type: Date
-    },
     paid: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    recurring: {
+      type: Boolean,
+      default: false
     }
   },
   {
@@ -41,5 +43,9 @@ const paymentSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
+
+paymentSchema.virtual('status').get(function getStatus(this: any) {
+  return this.paid ? 'paid' : this.due < Date.now() ? 'overdue' : 'due';
+});
 
 export default models.Payment || model('Payment', paymentSchema);
