@@ -10,7 +10,7 @@ class PaymentRoutes extends GuardedRoutes {
     this._assignRoutes();
   }
 
-  private _assignRoutes() {
+  protected _assignRoutes() {
     this.router.get('/', (...args) => this.controller.getAllPayments(...args));
 
     this.router.post('/', (...args) => this.controller.createPayment(...args));

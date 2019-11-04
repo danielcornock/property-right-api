@@ -3,6 +3,7 @@ import fileService from '../../services/fileService';
 import { GuardedRoutes } from '../abstract/guardedRoutes';
 import tenantRoutes from '../tenant/tenantRoutes';
 import todoRoutes from '../todo/todoRoutes';
+import paymentRoutes from '../payment/paymentRoutes';
 
 class PropertyRoutes extends GuardedRoutes {
   private controller: PropertyController;
@@ -34,6 +35,8 @@ class PropertyRoutes extends GuardedRoutes {
     this.router.use('/:propertyId/todos', todoRoutes);
 
     this.router.use('/:propertyId/tenants', tenantRoutes);
+
+    this.router.use('/:propertyId/payments', paymentRoutes);
   }
 }
 

@@ -1,5 +1,6 @@
 import { GuardedRoutes } from '../abstract/guardedRoutes';
 import { TenantController } from './../../collections/Tenant/tenantController';
+import paymentRoutes from '../payment/paymentRoutes';
 
 class TenantRoutes extends GuardedRoutes {
   private controller: TenantController;
@@ -8,6 +9,7 @@ class TenantRoutes extends GuardedRoutes {
     super();
     this.controller = new TenantController();
     this._assignRoutes();
+    this._useExtenalRoutes();
   }
 
   protected _assignRoutes(): void {
@@ -20,6 +22,10 @@ class TenantRoutes extends GuardedRoutes {
     this.router.put('/:tenantId', (...args) => this.controller.updateTenant(...args));
 
     this.router.delete('/:tenantId', (...args) => this.controller.deleteTenant(...args));
+  }
+
+  private _useExtenalRoutes() {
+    this.router.use('/:propertyId/payments', paymentRoutes);
   }
 }
 
