@@ -61,7 +61,7 @@ export class TenantController {
 
   public async updateTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const tenant: any = await this._tenantDataService.update(
+      const [tenant]: any = await this._tenantDataService.update(
         req.user._id,
         { _id: req.params.tenantId },
         req.body

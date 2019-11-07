@@ -52,7 +52,7 @@ export class TodoController {
 
   public async updateTodo(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const updatedTodo = await this._todoDataService.update(
+      const [updatedTodo] = await this._todoDataService.update(
         req.user._id,
         { _id: req.params.todoId },
         req.body

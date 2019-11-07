@@ -48,8 +48,10 @@ export abstract class AbstractDatabaseService {
 
   public async update(userId: string, query: FetchQuery, data: any) {
     const oldDocument = await this.findOne(userId, query);
+    const oldData = JSON.parse(JSON.stringify(oldDocument));
     const updatedDocument = Object.assign(oldDocument, data);
-    return updatedDocument.save();
+    const documentResponse = await updatedDocument.save();
+    return [documentResponse, oldData];
   }
 
   public aggregate(aggregation: Array<any>): Aggregate<any[]> {

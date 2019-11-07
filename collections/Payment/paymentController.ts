@@ -2,6 +2,7 @@ import DatabaseService from '../../services/database/databaseService';
 import Payment from './paymentModel';
 import { IRequest, IResponse, INext } from '../../config/interfaces/IMiddlewareParams';
 import resService from '../../services/responseService';
+import paymentService from './paymentService';
 
 export default class PaymentController {
   private _paymentDataService: DatabaseService;
@@ -20,7 +21,9 @@ export default class PaymentController {
         query.tenant = req.params.tenantId;
       }
 
-      const payments = await this._paymentDataService.findMany(req.user._id, query);
+      let payments = await this._paymentDataService.findMany(req.user._id, query).sort({ due: -1 });
+
+      // payments = paymentService.sortPayments(payments);
 
       resService.successFind(res, { payments: payments });
     } catch (e) {
@@ -48,11 +51,19 @@ export default class PaymentController {
 
   public async updatePayment(req: IRequest, res: IResponse, next: INext) {
     try {
-      const payment = await this._paymentDataService.update(
+      const [payment, oldPayment] = await this._paymentDataService.update(
         req.user._id,
         { _id: req.params.paymentId },
         req.body
       );
+
+      if (paymentService.isRecurringPayment(payment, oldPayment)) {
+        oldPayment._id = null;
+        oldPayment.due = new Date(oldPayment.due);
+        oldPayment.due.setMonth(oldPayment.due.getMonth() + 1);
+        await this._paymentDataService.create(req.user._id, oldPayment);
+      }
+
       resService.successCreate(res, { payment: payment });
     } catch (e) {
       return next(e);

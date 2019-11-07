@@ -78,7 +78,7 @@ export default class PropertyController {
     try {
       if (req.file) req.body.image = await fileService.setImagePath(req);
 
-      const updatedProperty = await this._propertyDataService.update(
+      const [updatedProperty] = await this._propertyDataService.update(
         req.user._id,
         { _id: req.params.propertyId },
         req.body
