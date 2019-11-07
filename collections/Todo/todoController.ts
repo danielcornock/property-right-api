@@ -1,9 +1,8 @@
 import { INext, IRequest, IResponse } from '../../config/interfaces/IMiddlewareParams';
-import databaseService from '../../services/database/databaseService';
-import Todo, { ITodo } from './todoModel';
+import Todo from './todoModel';
 import responseService from '../../services/responseService';
 import DatabaseService from '../../services/database/databaseService';
-import todoService from './todoService';
+import queryService from '../../services/queryService';
 
 export class TodoController {
   private _todoDataService: DatabaseService;
@@ -14,10 +13,7 @@ export class TodoController {
 
   public async getAllTodos(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      let query: any = {};
-      if (req.params.propertyId) {
-        query.property = req.params.propertyId;
-      }
+      const query = queryService.buildParamQuery(req.params);
 
       const todos = await this._todoDataService
         .findMany(req.user._id, query)

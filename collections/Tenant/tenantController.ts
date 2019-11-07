@@ -3,6 +3,7 @@ import { ITenant } from './interfaces/ITenant';
 import responseService from '../../services/responseService';
 import Tenant from './tenantModel';
 import DatabaseService from '../../services/database/databaseService';
+import queryService from '../../services/queryService';
 
 export class TenantController {
   private _tenantDataService: DatabaseService;
@@ -13,10 +14,7 @@ export class TenantController {
 
   public async getAllTenants(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      let query: any = {};
-      if (req.params.propertyId) {
-        query.property = req.params.propertyId;
-      }
+      const query = queryService.buildParamQuery(req.params);
 
       const tenants: Array<ITenant> = await this._tenantDataService
         .findMany(req.user._id, query)

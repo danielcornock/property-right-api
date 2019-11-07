@@ -3,6 +3,7 @@ import Payment from './paymentModel';
 import { IRequest, IResponse, INext } from '../../config/interfaces/IMiddlewareParams';
 import resService from '../../services/responseService';
 import paymentService from './paymentService';
+import queryService from '../../services/queryService';
 
 export default class PaymentController {
   private _paymentDataService: DatabaseService;
@@ -13,13 +14,7 @@ export default class PaymentController {
 
   public async getAllPayments(req: IRequest, res: IResponse, next: INext) {
     try {
-      console.log(req.params);
-      let query: any = {};
-      if (req.params.propertyId) {
-        query.property = req.params.propertyId;
-      } else if (req.params.tenantId) {
-        query.tenant = req.params.tenantId;
-      }
+      const query = queryService.buildParamQuery(req.params);
 
       let payments = await this._paymentDataService.findMany(req.user._id, query).sort({ due: -1 });
 

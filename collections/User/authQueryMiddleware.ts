@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-import { INext } from '../../../utilities/interfaces/IMiddlewareParams';
+import { INext } from '../../config/interfaces/IMiddlewareParams';
 
 export class AuthQueryMiddleware {
   private _userSchema: Schema;
