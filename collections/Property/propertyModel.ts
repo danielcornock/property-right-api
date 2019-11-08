@@ -24,6 +24,8 @@ const propertySchema = new mongoose.Schema(
   }
 );
 
+propertySchema.index({ user: 1 });
+
 new PropertyQueryMiddleware(propertySchema);
 
 propertySchema.virtual('todoCount', {

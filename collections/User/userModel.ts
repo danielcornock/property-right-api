@@ -37,6 +37,8 @@ const userSchema: Schema = new Schema(
   { timestamps: true }
 );
 
+userSchema.index({ email: 1 });
+
 new AuthQueryMiddleware(userSchema);
 
 export default models.User || model('User', userSchema);

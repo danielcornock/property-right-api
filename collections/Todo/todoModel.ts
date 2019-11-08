@@ -42,6 +42,9 @@ const todoSchema = new mongoose.Schema(
   }
 );
 
+todoSchema.index({ property: 1 });
+todoSchema.index({ user: 1 });
+
 new TodoQueryMiddleware(todoSchema);
 
 export default models.Todo || model('Todo', todoSchema, 'Todo');

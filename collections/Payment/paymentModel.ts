@@ -44,6 +44,10 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
+paymentSchema.index({ property: 1 });
+paymentSchema.index({ user: 1 });
+paymentSchema.index({ tenant: 1 });
+
 paymentSchema.virtual('status').get(function getStatus(this: any) {
   return this.paid ? 'paid' : this.due < Date.now() ? 'overdue' : 'due';
 });

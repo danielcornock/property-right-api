@@ -41,6 +41,9 @@ const tenantSchema = new Schema(
   }
 );
 
+tenantSchema.index({ property: 1 });
+tenantSchema.index({ user: 1 });
+
 //*---------------------------------------------
 //* Virtuals
 //*---------------------------------------------
