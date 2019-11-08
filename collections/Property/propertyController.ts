@@ -22,7 +22,7 @@ export default class PropertyController {
     try {
       const properties = await this._propertyDataService
         .findMany(req.user._id)
-        .populate({ path: 'todoCount' })
+        .populate('todoCount')
         .populate('tenants')
         .exec();
 

@@ -16,11 +16,19 @@ export default class PaymentController {
     try {
       const query = queryService.buildParamQuery(req.params);
 
-      let payments = await this._paymentDataService.findMany(req.user._id, query).sort({ due: -1 });
+      let payments = this._paymentDataService.findMany(req.user._id, query).sort({ due: -1 });
+
+      if (req.params.propertyId) {
+        payments.populate({ path: 'tenant', select: 'name' });
+      } else if (Object.entries(req.params).length === 0 && req.params.constructor === Object) {
+        payments.populate({ path: 'tenant', select: 'name' }).populate({ path: 'property', select: 'name' });
+      }
+
+      const paymentsRes = await payments;
 
       // payments = paymentService.sortPayments(payments);
 
-      resService.successFind(res, { payments: payments });
+      resService.successFind(res, { payments: paymentsRes });
     } catch (e) {
       return next(e);
     }
