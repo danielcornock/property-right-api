@@ -1,11 +1,12 @@
 import { Schema, model, Model, Document, models } from 'mongoose';
 import { TenantQueryMiddleware } from './tenantQueryMiddleware';
 import Property from '../Property/propertyModel';
+import { ITenant } from './interfaces/ITenant';
 
 //*---------------------------------------------
 //* Model Definition
 //*---------------------------------------------
-const tenantSchema = new Schema(
+const tenantSchema: Schema<ITenant> = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -14,8 +15,7 @@ const tenantSchema = new Schema(
     },
     property: {
       type: Schema.Types.ObjectId,
-      ref: 'Property',
-      required: [true, 'You must add a tenant to a property']
+      ref: 'Property'
     },
     name: String,
     email: String,

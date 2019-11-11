@@ -1,5 +1,6 @@
 import { GuardedRoutes } from '../abstract/guardedRoutes';
 import PaymentController from '../../collections/Payment/paymentController';
+import { IPayment } from '../../collections/Payment/interfaces/IPayment';
 
 class PaymentRoutes extends GuardedRoutes {
   private controller: PaymentController;

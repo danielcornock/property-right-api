@@ -3,14 +3,16 @@ import resService from '../../services/responseService';
 import fileService from './../../services/fileService';
 import Property from './propertyModel';
 import DatabaseService from '../../services/database/databaseService';
-import Todo from '../Todo/todoModel';
+import Todo, { ITodo } from '../Todo/todoModel';
 import Tenant from '../Tenant/tenantModel';
 import { Error } from 'mongoose';
+import { ITenant } from '../Tenant/interfaces/ITenant';
+import { IProperty } from './interfaces/IProperty';
 
 export default class PropertyController {
-  private _propertyDataService: DatabaseService;
-  private _todoDataService: DatabaseService;
-  private _tenantDataService: DatabaseService;
+  private _propertyDataService: DatabaseService<IProperty>;
+  private _todoDataService: DatabaseService<ITodo>;
+  private _tenantDataService: DatabaseService<ITenant>;
 
   constructor() {
     this._propertyDataService = new DatabaseService(Property);

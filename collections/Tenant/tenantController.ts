@@ -6,7 +6,7 @@ import DatabaseService from '../../services/database/databaseService';
 import queryService from '../../services/queryService';
 
 export class TenantController {
-  private _tenantDataService: DatabaseService;
+  private _tenantDataService: DatabaseService<ITenant>;
 
   constructor() {
     this._tenantDataService = new DatabaseService(Tenant);
@@ -59,7 +59,7 @@ export class TenantController {
 
   public async updateTenant(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const [tenant]: any = await this._tenantDataService.update(
+      const [tenant]: Array<ITenant> = await this._tenantDataService.update(
         req.user._id,
         { _id: req.params.tenantId },
         req.body

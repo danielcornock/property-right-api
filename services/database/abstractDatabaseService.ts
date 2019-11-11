@@ -1,23 +1,23 @@
 import { Model, DocumentQuery, Query, Aggregate } from 'mongoose';
 import { CreateQuery, FetchQuery } from './interfaces/IQuery';
 
-export abstract class AbstractDatabaseService {
+export abstract class AbstractDatabaseService<T> {
   protected _model: Model<any>;
   constructor(model: Model<any>) {
     this._model = model;
   }
 
-  public findOne(userId: string, params: FetchQuery): DocumentQuery<any[], any, {}> {
+  public findOne(userId: string, params: FetchQuery): DocumentQuery<T, any, {}> {
     params = this._setUser(params, userId);
     return this._model.findOne(params);
   }
 
-  public findMany(userId: string, params: FetchQuery = {}): DocumentQuery<any[], any, {}> {
+  public findMany(userId: string, params: FetchQuery = {}): DocumentQuery<T[], any, {}> {
     params = this._setUser(params, userId);
     return this._model.find(params);
   }
 
-  public create(userId: string, data: any): Promise<any> {
+  public create(userId: string, data: any): Promise<T> {
     data = this._setUser(data, userId);
     return this._model.create(data);
   }
@@ -38,15 +38,7 @@ export abstract class AbstractDatabaseService {
     return this._model.deleteMany(query);
   }
 
-  public updateDeprecated(userId: string, docId: string, data: any): DocumentQuery<any[], any, {}> {
-    const query = {
-      _id: docId,
-      user: userId
-    };
-    return this._model.findOneAndUpdate(query, data);
-  }
-
-  public async update(userId: string, query: FetchQuery, data: any) {
+  public async update(userId: string, query: FetchQuery, data: any): Promise<[T, T]> {
     const oldDocument = await this.findOne(userId, query);
     const oldData = JSON.parse(JSON.stringify(oldDocument));
     const updatedDocument = Object.assign(oldDocument, data);
@@ -54,7 +46,7 @@ export abstract class AbstractDatabaseService {
     return [documentResponse, oldData];
   }
 
-  public aggregate(aggregation: Array<any>): Aggregate<any[]> {
+  public aggregate(aggregation: Array<any>): Aggregate<T[]> {
     return this._model.aggregate(aggregation);
   }
 

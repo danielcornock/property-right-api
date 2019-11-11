@@ -4,19 +4,23 @@ import { IRequest, IResponse, INext } from '../../config/interfaces/IMiddlewareP
 import resService from '../../services/responseService';
 import paymentService from './paymentService';
 import queryService from '../../services/queryService';
+import { IPayment } from './interfaces/IPayment';
+import { DocumentQuery } from 'mongoose';
 
 export default class PaymentController {
-  private _paymentDataService: DatabaseService;
+  private _paymentDataService: DatabaseService<IPayment>;
 
   constructor() {
     this._paymentDataService = new DatabaseService(Payment);
   }
 
-  public async getAllPayments(req: IRequest, res: IResponse, next: INext) {
+  public async getAllPayments(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
       const query = queryService.buildParamQuery(req.params);
 
-      let payments = this._paymentDataService.findMany(req.user._id, query).sort({ due: -1 });
+      let payments: DocumentQuery<IPayment[], any, {}> = this._paymentDataService
+        .findMany(req.user._id, query)
+        .sort({ due: -1 });
 
       if (req.params.propertyId) {
         payments.populate({ path: 'tenant', select: 'name' });
@@ -24,9 +28,7 @@ export default class PaymentController {
         payments.populate({ path: 'tenant', select: 'name' }).populate({ path: 'property', select: 'name' });
       }
 
-      const paymentsRes = await payments;
-
-      // payments = paymentService.sortPayments(payments);
+      const paymentsRes: Array<IPayment> = await payments;
 
       resService.successFind(res, { payments: paymentsRes });
     } catch (e) {
@@ -34,27 +36,32 @@ export default class PaymentController {
     }
   }
 
-  public async createPayment(req: IRequest, res: IResponse, next: INext) {
+  public async createPayment(req: IRequest, res: IResponse, next: INext): Promise<void> {
     console.log(req.body);
     try {
-      const payment = await this._paymentDataService.create(req.user._id, req.body);
+      const payment: IPayment = await this._paymentDataService.create(req.user._id, req.body);
+      console.log(payment.user);
       resService.successCreate(res, { payment: payment });
     } catch (e) {
       return next(e);
     }
   }
 
-  public async getPayment(req: IRequest, res: IResponse, next: INext) {
+  public async getPayment(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const payment = await this._paymentDataService.findOne(req.user._id, { _id: req.params.paymentId });
+      const payment: IPayment = await this._paymentDataService.findOne(req.user._id, {
+        _id: req.params.paymentId
+      });
+
+      resService.successFind(res, { payment: payment });
     } catch (e) {
       return next(e);
     }
   }
 
-  public async updatePayment(req: IRequest, res: IResponse, next: INext) {
+  public async updatePayment(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
-      const [payment, oldPayment] = await this._paymentDataService.update(
+      const [payment, oldPayment]: Array<IPayment> = await this._paymentDataService.update(
         req.user._id,
         { _id: req.params.paymentId },
         req.body
@@ -73,7 +80,7 @@ export default class PaymentController {
     }
   }
 
-  public async deletePayment(req: IRequest, res: IResponse, next: INext) {
+  public async deletePayment(req: IRequest, res: IResponse, next: INext): Promise<void> {
     try {
       await this._paymentDataService.deleteOne(req.user._id, { _id: req.params.paymentId });
 

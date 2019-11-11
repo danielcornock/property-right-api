@@ -1,11 +1,11 @@
 import { INext, IRequest, IResponse } from '../../config/interfaces/IMiddlewareParams';
-import Todo from './todoModel';
+import Todo, { ITodo } from './todoModel';
 import responseService from '../../services/responseService';
 import DatabaseService from '../../services/database/databaseService';
 import queryService from '../../services/queryService';
 
 export class TodoController {
-  private _todoDataService: DatabaseService;
+  private _todoDataService: DatabaseService<ITodo>;
 
   constructor() {
     this._todoDataService = new DatabaseService(Todo);
