@@ -1,5 +1,5 @@
 export interface FetchQuery {
-  [key: string]: string;
+  [key: string]: string | number | boolean;
 }
 
 export interface CreateQuery {

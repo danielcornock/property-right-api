@@ -89,4 +89,19 @@ export default class PaymentController {
       return next(e);
     }
   }
+
+  public async getUrgentPayments(req: IRequest, res: IResponse, next: INext) {
+    try {
+      const payments = await this._paymentDataService
+        .findMany(req.user._id, { paid: false })
+        .limit(3)
+        .sort({ due: 1 })
+        .select({ amount: 1, tenant: 1, due: 1 })
+        .populate('tenant');
+
+      resService.successFind(res, { payments });
+    } catch (e) {
+      return next(e);
+    }
+  }
 }

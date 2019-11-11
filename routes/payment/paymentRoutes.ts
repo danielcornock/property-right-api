@@ -16,6 +16,8 @@ class PaymentRoutes extends GuardedRoutes {
 
     this.router.post('/', (...args) => this.controller.createPayment(...args));
 
+    this.router.get('/urgent', (...args) => this.controller.getUrgentPayments(...args));
+
     this.router.get('/:paymentId', (...args) => this.controller.getPayment(...args));
 
     this.router.put('/:paymentId', (...args) => this.controller.updatePayment(...args));
