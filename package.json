@@ -4,13 +4,13 @@
   "description": "API for Property Right.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon dist/server.js",
+    "start:remote": "nodemon dist/server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "start:local": "DB_PORT=27017 NODE_ENV=local nodemon dist/server.js",
     "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000",
     "watch-ts": "tsc -w",
-    "build-ts": "tsc",
-    "postinstall": "npm run build-ts"
+    "start": "node dist/server.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -54,13 +54,8 @@
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "mocha": "^6.2.0",
-    "mockgoose": "^8.0.2",
     "morgan": "^1.9.1",
     "prettier": "^1.18.2",
-    "request": "^2.88.0",
-    "should": "^13.2.3",
-    "supertest": "^4.0.2",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.4"
