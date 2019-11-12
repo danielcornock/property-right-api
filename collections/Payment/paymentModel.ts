@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, models } from 'mongoose';
 import { INext } from '../../config/interfaces/IMiddlewareParams';
+import { IPayment } from './interfaces/IPayment';
 
 //*---------------------------------------------
 //* Model Definition
