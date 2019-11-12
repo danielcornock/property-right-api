@@ -10,7 +10,8 @@
     "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000",
     "watch-ts": "tsc -w",
     "start": "node dist/server.js",
-    "build": "tsc"
+    "tsc": "tsc",
+    "build": "npm run tsc"
   },
   "repository": {
     "type": "git",
