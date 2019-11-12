@@ -8,8 +8,9 @@
     "start:prod": "NODE_ENV=production nodemon server.js",
     "start:local": "DB_PORT=27017 NODE_ENV=local nodemon dist/server.js",
     "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000",
-    "build": "rm -R dist; tsc -p .; cp -av images dist",
-    "watch-ts": "tsc -w"
+    "watch-ts": "tsc -w",
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts"
   },
   "repository": {
     "type": "git",

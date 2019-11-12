@@ -14,7 +14,7 @@ export class Middleware {
 
     app.use('/images', express.static(path.join(__dirname, '../../images')));
 
-    app.use(cors({ origin: config.clientPort }));
+    app.use(cors({ origin: [config.clientPort, 'https://property-right.firebaseapp.com/'] }));
 
     if (config.env !== 'production') {
       app.use(morgan('dev'));
