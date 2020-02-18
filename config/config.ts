@@ -5,7 +5,7 @@ interface IDatabases {
   [key: string]: string;
 }
 
-export const env: string = process.env.NODE_ENV || 'development';
+export const env: string = process.env.ENV || 'development';
 
 export const port: string = process.env.PORT || '2100';
 
