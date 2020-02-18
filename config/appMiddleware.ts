@@ -14,7 +14,7 @@ export class Middleware {
 
     app.use('/images', express.static(path.join(__dirname, '../../images')));
 
-    app.use(cors({ origin: true }));
+    app.use(cors({ origin: [config.clientPort, 'https://property-right-ui.herokuapp.com'] }));
 
     if (config.env !== 'production') {
       app.use(morgan('dev'));
