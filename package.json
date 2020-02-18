@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start:remote": "nodemon app/server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js",
+    "start:prod": "node app/server.js",
     "start:local": "DB_PORT=27017 NODE_ENV=local nodemon app/server.js",
     "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000",
     "watch-ts": "tsc -w",
