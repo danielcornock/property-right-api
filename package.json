@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start:remote": "nodemon app/server.js",
-    "start:prod": "node server.js",
+    "start:prod": "node app/server.js",
     "start:local": "DB_PORT=27017 NODE_ENV=local nodemon app/server.js",
     "test": "NODE_ENV=test find ./ -name '*.spec.js' | xargs mocha -R spec --exit -t 10000",
     "watch-ts": "tsc -w",
@@ -41,9 +41,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.5",
     "multer": "^1.4.2",
+    "ts-node": "^8.4.1",
+    "tslib": "^1.10.0",
     "typescript": "^3.7.5",
-    "validator": "^11.1.0",
-    "ts-node": "^8.4.1"
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
